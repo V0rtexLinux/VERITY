@@ -24,7 +24,11 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    fileTree(dir: 'libs', include: ['*.jar']).each { modImplementation files(it) }
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.21.5:${project.geckolib_version}"
+
+    if (file('libs').exists()) {
+        implementation fileTree(dir: 'libs', include: ['*.jar'])
+    }
 
     implementation "com.google.code.gson:gson:2.10.1"
 }
