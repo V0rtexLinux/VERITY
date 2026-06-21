@@ -1,0 +1,42 @@
+PS C:\verity-src\verity> ./gradlew.bat build
+
+> Configure project :
+Fabric Loom: 1.15.5
+Previous process has disowned the lock due to abrupt termination.
+Found existing cache lock file (ACQUIRED_PREVIOUS_OWNER_DISOWNED), rebuilding loom cache. This may have been caused by a failed or canceled build.
+
+[Incubating] Problems report is available at: file:///C:/verity-src/verity/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+A problem occurred configuring root project 'verity'.
+> Could not resolve all files for configuration ':mainRuntimeDependencyResolve'.
+   > Could not find software.bernie.geckolib:geckolib-fabric-1.21.5:5.5.1.
+     Searched in the following locations:
+       - file:/C:/verity-src/verity/.gradle/loom-cache/remapped_mods/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.pom
+       - file:/C:/Users/Usu%C3%A1rio/.gradle/caches/fabric-loom/minecraftMaven/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.pom
+       - file:/C:/verity-src/verity/.gradle/loom-cache/minecraftMaven/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.pom
+       - https://maven.fabricmc.net/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.pom
+       - https://libraries.minecraft.net/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.pom
+       - https://libraries.minecraft.net/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.jar
+       - https://repo.maven.apache.org/maven2/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.jar
+       - https://repo.maven.apache.org/maven2/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.pom
+       - https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/software/bernie/geckolib/geckolib-fabric-1.21.5/5.5.1/geckolib-fabric-1.21.5-5.5.1.pom
+     Required by:
+         root project 'verity'
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.2.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 5s
+PS C:\verity-src\verity>
