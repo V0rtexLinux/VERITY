@@ -80,7 +80,7 @@ public class ChatHandler {
     private static boolean onChat(PlayerChatMessage message,
                                    ServerPlayer sender,
                                    ChatType.Bound params) {
-        String content = message.signedBody().content().raw().trim();
+        String content = message.signedBody().content().trim();
         var m = TRIGGER.matcher(content);
         if (!m.matches()) return true;
 

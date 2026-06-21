@@ -21,7 +21,6 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.DoorBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.damagesource.DamageSource;
@@ -154,7 +153,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
         }
         if (days == 4 && stage == 2) {
             state.setCurrentStage(3);
-            world.getLevelData().setRaining(true);
+            ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
             broadcastHorror(world, "§6[Verity]§r §7I know you ate pizza yesterday.");
         }
         if (days == 6 && stage == 3) {
@@ -163,7 +162,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
         }
         if (days == 8 && stage == 4) {
             state.setCurrentStage(5);
-            world.getLevelData().setRaining(true);
+            ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
             broadcastHorror(world, "§4[Verity]§r §c...");
         }
     }
@@ -213,7 +212,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage3(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(true);
-        world.getLevelData().setRaining(true);
+        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
 
         alarmCooldown--;
         if (alarmCooldown <= 0) {
@@ -234,7 +233,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage4(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(true);
-        world.getLevelData().setRaining(true);
+        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
 
         if (world.players().size() > 1 && state.getDaysElapsed() < 4) {
             state.triggerInvitedFriendEarly();
@@ -257,7 +256,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage5(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(false);
-        world.getLevelData().setRaining(true);
+        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
 
         if (this.getHealth() < 2000.0f) this.setHealth(2000.0f);
 
@@ -325,30 +324,28 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     //  Damage override — immortality                                       //
     // ------------------------------------------------------------------ //
     @Override
-    public boolean hurt(DamageSource source, float amount) {
-        if (this.getHealth() - amount <= 0.001f) {
-            this.setHealth(0.001f + amount);
-        }
-        return super.hurt(source, amount * 0.0f);
+    public boolean isInvulnerableTo(net.minecraft.server.level.ServerLevel level, DamageSource source) {
+        return true;
     }
 
     // ------------------------------------------------------------------ //
     //  NBT                                                                 //
     // ------------------------------------------------------------------ //
     @Override
-    public void readAdditionalSaveData(CompoundTag nbt) {
-        super.readAdditionalSaveData(nbt);
-        if (nbt.contains("TargetPlayerUUID")) {
-            targetPlayerUUID = nbt.getUUID("TargetPlayerUUID");
-        }
-        hasJumped = nbt.getBoolean("HasJumped");
+    public void readAdditionalSaveData(net.minecraft.util.valueinput.ValueInput input) {
+        super.readAdditionalSaveData(input);
+        input.read("TargetPlayerUUID", net.minecraft.core.UUIDUtil.CODEC)
+             .ifPresent(uuid -> targetPlayerUUID = uuid);
+        hasJumped = input.getBoolean("HasJumped");
     }
 
     @Override
-    public void addAdditionalSaveData(CompoundTag nbt) {
-        super.addAdditionalSaveData(nbt);
-        if (targetPlayerUUID != null) nbt.putUUID("TargetPlayerUUID", targetPlayerUUID);
-        nbt.putBoolean("HasJumped", hasJumped);
+    public void addAdditionalSaveData(net.minecraft.util.valueoutput.ValueOutput output) {
+        super.addAdditionalSaveData(output);
+        if (targetPlayerUUID != null) {
+            output.store("TargetPlayerUUID", net.minecraft.core.UUIDUtil.CODEC, targetPlayerUUID);
+        }
+        output.putBoolean("HasJumped", hasJumped);
     }
 
     // ------------------------------------------------------------------ //

@@ -2,7 +2,7 @@ package com.mod.verity.voice;
 
 import com.mod.verity.VerityMod;
 import net.minecraft.core.BlockPos;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
@@ -36,7 +36,7 @@ public class VerityVoiceManager {
      */
     public static void playVoiceSound(ServerLevel world, BlockPos pos, String soundName, float volume, float pitch) {
         try {
-            SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.fromNamespaceAndPath("verity", soundName));
+            SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(Identifier.of("verity", soundName));
             if (soundEvent != null) {
                 // Add slight natural variation to pitch
                 float naturalPitch = pitch + (float) (Math.random() - 0.5) * NATURAL_VARIATION;
@@ -122,6 +122,6 @@ public class VerityVoiceManager {
      */
     public static boolean isVoiceAvailable() {
         // Check if key sound files are registered
-        return BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.fromNamespaceAndPath("verity", "hello")) != null;
+        return BuiltInRegistries.SOUND_EVENT.get(Identifier.of("verity", "hello")) != null;
     }
 }

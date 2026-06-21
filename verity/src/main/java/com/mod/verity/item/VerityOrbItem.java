@@ -29,7 +29,6 @@ public class VerityOrbItem extends Item {
         super(settings);
     }
 
-    @Override
     public void appendHoverText(ItemStack stack, Item.TooltipContext context,
                                  List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal("§7A warm, faintly glowing orb."));
@@ -37,11 +36,10 @@ public class VerityOrbItem extends Item {
         tooltip.add(Component.literal("§8Place it back where it began."));
     }
 
-    @Override
     public InteractionResult use(Level world, Player user, InteractionHand hand) {
         if (!world.isClientSide()) {
-            user.displayClientMessage(
-                    Component.literal("§e[Verity]§r §7Right-click the box to seal me inside."), true);
+            user.sendSystemMessage(
+                    Component.literal("§e[Verity]§r §7Right-click the box to seal me inside."));
         }
         return InteractionResult.PASS;
     }

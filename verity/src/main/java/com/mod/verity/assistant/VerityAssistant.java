@@ -111,7 +111,7 @@ public class VerityAssistant {
         sendPrivate(player, prefix(stage) + " §7A procurar " + entry.displayName + "§7...");
 
         CompletableFuture.runAsync(() -> {
-            ServerLevel world   = (ServerLevel) player.level();
+            ServerLevel world   = player.serverLevel();
             BlockPos origin     = player.blockPosition();
             int radius = 64, vertRange = 64;
 
@@ -162,7 +162,7 @@ public class VerityAssistant {
                                    MinecraftServer server, int stage) {
         sendPrivate(player, prefix(stage) + " §7A escanear todos os minérios perto de ti...");
         CompletableFuture.runAsync(() -> {
-            ServerLevel world = (ServerLevel) player.level();
+            ServerLevel world = player.serverLevel();
             BlockPos origin   = player.blockPosition();
             int radius = 48, vertRange = 48;
 
@@ -235,7 +235,7 @@ public class VerityAssistant {
                 holderSet = tagSet.get();
             } else {
                 ResourceKey<Structure> rk = ResourceKey.create(Registries.STRUCTURE,
-                        net.minecraft.core.ResourceLocation.tryParse("minecraft:" + entry.mcId()));
+                        net.minecraft.resources.ResourceLocation.tryParse("minecraft:" + entry.mcId()));
                 Optional<Holder.Reference<Structure>> holder = reg.get(rk);
                 if (holder.isEmpty()) {
                     server.execute(() -> sendPrivate(player,
@@ -325,7 +325,7 @@ public class VerityAssistant {
                 prefix(stage), shape, blockName, size));
 
         CompletableFuture.runAsync(() -> {
-            ServerLevel world = (ServerLevel) player.level();
+            ServerLevel world = player.serverLevel();
             BlockPos origin   = player.blockPosition();
             Vec3 look  = player.getLookAngle();
             int fx = (int) Math.round(look.x);

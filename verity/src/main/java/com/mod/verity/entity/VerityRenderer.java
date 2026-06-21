@@ -13,6 +13,6 @@ public class VerityRenderer extends GeoEntityRenderer<VerityEntity> {
 
     public VerityRenderer(EntityRendererProvider.Context context) {
         super(context, new VerityModel());
-        this.shadowRadius = 0.5f;
+        this.shadowSize = 0.5f;
     }
 }

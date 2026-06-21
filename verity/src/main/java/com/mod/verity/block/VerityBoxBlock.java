@@ -9,7 +9,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -25,6 +24,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.EntitySpawnReason;
 
 /**
  * Verity's Box — right-click to spawn Verity (Stage 1) or seal him back inside.
@@ -53,14 +53,14 @@ public class VerityBoxBlock extends Block {
     //  Interaction                                                         //
     // ------------------------------------------------------------------ //
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos,
-                                  Player player, InteractionHand hand, BlockHitResult hit) {
+    public InteractionResult useWithoutItem(BlockState state, Level world, BlockPos pos,
+                                             Player player, BlockHitResult hit) {
         if (world.isClientSide()) return InteractionResult.SUCCESS;
 
         ServerLevel serverLevel = (ServerLevel) world;
         VerityWorldState ws = VerityWorldState.getOrCreate(serverLevel);
 
-        ItemStack heldItem = player.getItemInHand(hand);
+        ItemStack heldItem = player.getMainHandItem();
         if (heldItem.getItem() == VerityMod.VERITY_ORB_ITEM) {
             heldItem.shrink(1);
             ws.setCurrentStage(1);
@@ -97,12 +97,12 @@ public class VerityBoxBlock extends Block {
                 pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                 20, 0.3, 0.3, 0.3, 0.1);
 
-        VerityEntity verity = VerityMod.VERITY.create(world);
+        VerityEntity verity = VerityMod.VERITY.create(world, EntitySpawnReason.COMMAND);
         if (verity == null) {
             VerityMod.LOGGER.error("[Verity] Failed to create VerityEntity!");
             return;
         }
-        verity.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0, 0);
+        verity.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0f, 0f);
         world.addFreshEntity(verity);
 
         VerityWorldState ws = VerityWorldState.getOrCreate(world);

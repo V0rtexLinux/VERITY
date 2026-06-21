@@ -62,7 +62,7 @@ public abstract class WindowStalkingMixin {
 
         Vec3 playerLook = player.getLookAngle();
         Vec3 toVerity   = verity.position().subtract(player.position()).normalize();
-        double dot       = playerLook.dotProduct(toVerity);
+        double dot       = playerLook.dot(toVerity);
 
         boolean playerLooking = dot >= LOOK_THRESHOLD;
         double dist = player.distanceTo(verity);
@@ -77,7 +77,7 @@ public abstract class WindowStalkingMixin {
                 Vec3 awayDir = glassCenter.subtract(playerPos).normalize();
                 double behindX = glassCenter.x + awayDir.x;
                 double behindZ = glassCenter.z + awayDir.z;
-                verity.teleport(behindX, glassPos.getY(), behindZ);
+                verity.teleportTo(behindX, glassPos.getY(), behindZ);
                 stalkCooldown = 100 + world.getRandom().nextInt(100);
             }
         }
@@ -93,7 +93,7 @@ public abstract class WindowStalkingMixin {
                 world.playSound(null, glassPos, SoundEvents.WITHER_SPAWN,  SoundSource.HOSTILE, 0.6f, 1.5f);
                 // Apply blindness + nausea for 2 seconds
                 player.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 1, false, false));
-                player.addEffect(new MobEffectInstance(MobEffects.CONFUSION,    60, 1, false, false));
+                player.addEffect(new MobEffectInstance(MobEffects.NAUSEA,       60, 1, false, false));
                 verity.setHasJumped(true);
                 stalkCooldown = 200;
             }
@@ -111,7 +111,7 @@ public abstract class WindowStalkingMixin {
     private BlockPos findGlassNearPlayer(Player player, ServerLevel world) {
         BlockPos origin = player.blockPosition().above();
         int r = (int) GLASS_SCAN_RANGE;
-        for (BlockPos pos : BlockPos.iterate(origin.add(-r, -2, -r), origin.add(r, 2, r))) {
+        for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-r, -2, -r), origin.offset(r, 2, r))) {
             if (isGlass(world, pos)) {
                 return pos.toImmutable();
             }

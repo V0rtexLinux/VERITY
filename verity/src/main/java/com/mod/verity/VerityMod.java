@@ -43,7 +43,7 @@ public class VerityMod implements ModInitializer {
                     .sized(0.6f, 0.6f)
                     .clientTrackingRange(16)
                     .updateInterval(1)
-                    .build()
+                    .build("verity:verity")
     );
 
     // ------------------------------------------------------------------ //

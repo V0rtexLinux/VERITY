@@ -1,0 +1,30 @@
+Let me continue with all the remaining fixes. I need to fix:
+
+VoiceHudRenderer.java - GuiGraphics→GuiGraphicsExtractor, ResourceLocation→Identifier
+SessionTracker.java - serverLevel()
+VerityOrbItem.java - appendHoverText, use(), displayClientMessage
+VerityRenderer.java - shadowRadius→shadowSize
+VerityMod.java - ResourceLocation→Identifier, EntityType.build(key), serverLevel()
+VerityEntity.java - hurt() final, readAdditionalSaveData, addAdditionalSaveData, setRaining
+VerityBoxBlock.java - SoundEvents.value(), EntityType.create, moveTo, use()→useWithoutItem
+ChatHandler.java - message.raw(), serverLevel(), getServer(), SoundEvents
+WindowStalkingMixin.java - serverLevel(), dotProduct→dot, teleport, CONFUSION→NAUSEA, BlockPos fixes
+VerityAssistant.java - serverLevel(), ResourceLocation.tryParse
+VerityVoiceManager.java - ResourceLocation→Identifier
+I'll batch the independent ones together and start working through the imports and method signatures systematically.
+
+For VoiceHudRenderer.java, I need to update the GuiGraphics import to use Fabric's version, swap ResourceLocation for Identifier, and adjust the render method signature accordingly. For SessionTracker.java, I'm converting the two serverLevel() calls to cast player.level() as ServerLevel instead. With VerityOrbItem.java, I need to remove the @Override annotations from appendHoverText and use() since they don't properly override parent methods, and change displayClientMessage() to sendSystemMessage().
+
+For VerityRenderer.java, the shadowRadius field needs to be renamed to shadowSize to match the unobfuscated names in 26.1.2. VerityMod.java is going to be the trickiest one to handle.
+
+The main updates involve swapping ResourceLocation for Identifier throughout, adding the necessary registry imports, and creating a ResourceKey for the entity type before registering it. I'll also need to fix the player level casting in the death event handler and update the entity class imports to remove CompoundTag while adding the Value-related ones. Finishing the method implementations for reading and writing the HasJumped data using the new ValueInput/ValueOutput system, then I need to update all five locations where setRaining is called to use the ServerLevelData cast instead of calling it directly on the level data.
+
+Now I'm going through VerityBoxBlock to replace the use method signature, update sound event references to remove the .value() calls, fix the EntityType creation to include the spawn reason parameter, and ensure the moveTo calls use float literals. For ChatHandler, I'm simplifying the message content access by removing the intermediate raw() call.
+
+Continuing with WindowStalkingMixin, I need to cast the player's level to ServerLevel, switch from dotProduct to dot for vector operations, update the teleport method name to teleportTo, change the confusion effect to nausea, and adjust the BlockPos iteration call.
+
+For VerityAssistant.java, there are three instances of serverLevel() that need the same casting treatment, plus I need to update the ResourceLocation import to use Identifier instead.
+
+For VerityVoiceManager.java, I'm updating the import statement to use the Identifier class from the util package.
+
+Now I'll apply all these migration fixes across both files in parallel batches to speed up the process.
