@@ -13,6 +13,8 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRe
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
@@ -36,14 +38,20 @@ public class VerityMod implements ModInitializer {
     // ------------------------------------------------------------------ //
     //  Entity Type                                                         //
     // ------------------------------------------------------------------ //
+    @SuppressWarnings("unchecked")
+    private static <T> ResourceKey<EntityType<T>> entityKey(String path) {
+        return (ResourceKey<EntityType<T>>) (ResourceKey<?>) ResourceKey.create(
+                Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(MOD_ID, path));
+    }
+
     public static final EntityType<VerityEntity> VERITY = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
-            ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity"),
+            VerityMod.<VerityEntity>entityKey("verity"),
             EntityType.Builder.<VerityEntity>of(VerityEntity::new, MobCategory.MONSTER)
                     .sized(0.6f, 0.6f)
                     .clientTrackingRange(16)
                     .updateInterval(1)
-                    .build("verity:verity")
+                    .build(VerityMod.<VerityEntity>entityKey("verity"))
     );
 
     // ------------------------------------------------------------------ //
@@ -152,7 +160,7 @@ public class VerityMod implements ModInitializer {
     private static void registerDeathEvent() {
         ServerLivingEntityEvents.ALLOW_DEATH.register((entity, damageSource, damageAmount) -> {
             if (!(entity instanceof ServerPlayer player)) return true;
-            ServerLevel level = player.serverLevel();
+            ServerLevel level = (ServerLevel) player.level();
             com.mod.verity.state.VerityWorldState state =
                     com.mod.verity.state.VerityWorldState.getOrCreate(level);
             if (state.getCurrentStage() >= 4) {

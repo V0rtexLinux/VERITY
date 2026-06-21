@@ -1,0 +1,978 @@
+PS C:\verity-src\verity> ./gradlew.bat build
+
+> Configure project :
+Fabric Loom: 1.15.5
+Previous process has disowned the lock due to abrupt termination.
+Found existing cache lock file (ACQUIRED_PREVIOUS_OWNER_DISOWNED), rebuilding loom cache. This may have been caused by a failed or canceled build.
+
+> Task :compileJava
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:27: error: package software.bernie.geckolib.animatable does not exist
+import software.bernie.geckolib.animatable.GeoAnimatable;
+                                          ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:28: error: package software.bernie.geckolib.animatable.instance does not exist
+import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+                                                   ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:30: error: package software.bernie.geckolib.animation does not exist
+import software.bernie.geckolib.animation.AnimationState;
+                                         ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:31: error: package software.bernie.geckolib.util does not exist
+import software.bernie.geckolib.util.GeckoLibUtil;
+                                    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:47: error: cannot find symbol
+public class VerityEntity extends Monster implements GeoAnimatable {
+                                                     ^
+  symbol: class GeoAnimatable
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:52: error: cannot find symbol
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+                  ^
+  symbol:   class AnimatableInstanceCache
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:54: error: cannot find symbol
+    private static final RawAnimation IDLE_ANIM   = RawAnimation.begin().thenLoop("animation.verity.idle");
+                         ^
+  symbol:   class RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:55: error: cannot find symbol
+    private static final RawAnimation WALK_ANIM   = RawAnimation.begin().thenLoop("animation.verity.walk");
+                         ^
+  symbol:   class RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:56: error: cannot find symbol
+    private static final RawAnimation STARE_ANIM  = RawAnimation.begin().thenLoop("animation.verity.stare");
+                         ^
+  symbol:   class RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:57: error: cannot find symbol
+    private static final RawAnimation STAGE3_ANIM = RawAnimation.begin().thenLoop("animation.verity.stage3_idle");
+                         ^
+  symbol:   class RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:58: error: cannot find symbol
+    private static final RawAnimation STAGE5_HUNT = RawAnimation.begin().thenLoop("animation.verity.stage5_hunt");
+                         ^
+  symbol:   class RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:59: error: cannot find symbol
+    private static final RawAnimation STAGE5_IDLE = RawAnimation.begin().thenLoop("animation.verity.stage5_idle");
+                         ^
+  symbol:   class RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\state\VerityWorldState.java:6: error: cannot find symbol
+import net.minecraft.util.Identifier;
+                         ^
+  symbol:   class Identifier
+  location: package net.minecraft.util
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:335: error: package net.minecraft.util.valueinput does not exist
+    public void readAdditionalSaveData(net.minecraft.util.valueinput.ValueInput input) {
+                                                                    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:343: error: package net.minecraft.util.valueoutput does not exist
+    public void addAdditionalSaveData(net.minecraft.util.valueoutput.ValueOutput output) {
+                                                                    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:425: error: cannot find symbol
+    public void registerControllers(AnimatableInstanceCache instanceCache) {
+                                    ^
+  symbol:   class AnimatableInstanceCache
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:441: error: cannot find symbol
+    public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
+           ^
+  symbol:   class AnimatableInstanceCache
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\state\VerityWorldState.java:18: error: cannot find symbol
+    private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "world_state");
+                         ^
+  symbol:   class Identifier
+  location: class VerityWorldState
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:29: error: package software.bernie.geckolib.animation does not exist
+import software.bernie.geckolib.animation.*;
+                               ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:5: error: cannot find symbol
+import net.minecraft.util.Identifier;
+                         ^
+  symbol:   class Identifier
+  location: package net.minecraft.util
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:7: error: package software.bernie.geckolib.model does not exist
+import software.bernie.geckolib.model.GeoEntityModel;
+                                     ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:20: error: cannot find symbol
+public class VerityModel extends GeoEntityModel<VerityEntity> {
+                                 ^
+  symbol: class GeoEntityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:22: error: cannot find symbol
+    private static final Identifier MODEL_SPHERE       = id("geo/verity_sphere.geo.json");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:23: error: cannot find symbol
+    private static final Identifier MODEL_CAVE_DWELLER = id("geo/verity_cave_dweller.geo.json");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:25: error: cannot find symbol
+    private static final Identifier TEX_STAGE1 = id("textures/entity/verity_sphere_stage1.png");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:26: error: cannot find symbol
+    private static final Identifier TEX_STAGE2 = id("textures/entity/verity_sphere_stage2.png");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:27: error: cannot find symbol
+    private static final Identifier TEX_STAGE3 = id("textures/entity/verity_sphere_stage3.png");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:28: error: cannot find symbol
+    private static final Identifier TEX_STAGE4 = id("textures/entity/verity_sphere_stage4.png");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:29: error: cannot find symbol
+    private static final Identifier TEX_STAGE5 = id("textures/entity/verity_cave_dweller.png");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:31: error: cannot find symbol
+    private static final Identifier ANIMATIONS  = id("animations/verity.animation.json");
+                         ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:34: error: cannot find symbol
+    public Identifier getModelResource(VerityEntity entity) {
+           ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:39: error: cannot find symbol
+    public Identifier getTextureResource(VerityEntity entity) {
+           ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:50: error: cannot find symbol
+    public Identifier getAnimationResource(VerityEntity entity) {
+           ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:64: error: cannot find symbol
+    private static Identifier id(String path) {
+                   ^
+  symbol:   class Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityRenderer.java:4: error: package software.bernie.geckolib.renderer does not exist
+import software.bernie.geckolib.renderer.GeoEntityRenderer;
+                                        ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityRenderer.java:12: error: cannot find symbol
+public class VerityRenderer extends GeoEntityRenderer<VerityEntity> {
+                                    ^
+  symbol: class GeoEntityRenderer
+C:\verity-src\verity\src\main\java\com\mod\verity\state\PlayerSessionData.java:6: error: cannot find symbol
+import net.minecraft.util.Identifier;
+                         ^
+  symbol:   class Identifier
+  location: package net.minecraft.util
+C:\verity-src\verity\src\main\java\com\mod\verity\state\PlayerSessionData.java:25: error: cannot find symbol
+    private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "player_sessions");
+                         ^
+  symbol:   class Identifier
+  location: class PlayerSessionData
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:16: error: cannot find symbol
+import net.minecraft.resources.ResourceLocation;
+                              ^
+  symbol:   class ResourceLocation
+  location: package net.minecraft.resources
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VerityVoiceManager.java:5: error: cannot find symbol
+import net.minecraft.util.Identifier;
+                         ^
+  symbol:   class Identifier
+  location: package net.minecraft.util
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:10: error: package net.fabricmc.fabric.api.client.rendering.v1.gui does not exist
+import net.fabricmc.fabric.api.client.rendering.v1.gui.GuiGraphicsExtractor;
+                                                      ^
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:12: error: cannot find symbol
+import net.minecraft.util.Identifier;
+                         ^
+  symbol:   class Identifier
+  location: package net.minecraft.util
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:42: error: cannot find symbol
+    private static void render(GuiGraphicsExtractor context, DeltaTracker tickDelta) {
+                               ^
+  symbol:   class GuiGraphicsExtractor
+  location: class VoiceHudRenderer
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoicePacket.java:9: error: cannot find symbol
+import net.minecraft.util.Identifier;
+                         ^
+  symbol:   class Identifier
+  location: package net.minecraft.util
+C:\verity-src\verity\src\main\java\com\mod\verity\ai\PromptSystem.java:108: error: cannot find symbol
+        String dimension = dim.location().getPath();
+                              ^
+  symbol:   method location()
+  location: variable dim of type ResourceKey<Level>
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:114: error: cannot find symbol
+            ServerLevel world   = player.serverLevel();
+                                        ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:165: error: cannot find symbol
+            ServerLevel world = player.serverLevel();
+                                      ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:223: error: cannot find symbol
+            ServerLevel world    = player.serverLevel();
+                                         ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:238: error: cannot find symbol
+                        net.minecraft.resources.ResourceLocation.tryParse("minecraft:" + entry.mcId()));
+                                               ^
+  symbol:   class ResourceLocation
+  location: package net.minecraft.resources
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:274: error: cannot find symbol
+        ServerLevel world = player.serverLevel();
+                                  ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:328: error: cannot find symbol
+            ServerLevel world = player.serverLevel();
+                                      ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:532: error: cannot find symbol
+        ServerLevel world = player.serverLevel();
+                                  ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:534: error: cannot find symbol
+                net.minecraft.world.entity.npc.Villager.class, player.getBoundingBox().inflate(6), e -> true);
+                                              ^
+  symbol:   class Villager
+  location: package net.minecraft.world.entity.npc
+C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:628: error: cannot find symbol
+                    ResourceLocation.tryParse("minecraft:" +
+                    ^
+  symbol:   variable ResourceLocation
+  location: class VerityAssistant
+C:\verity-src\verity\src\main\java\com\mod\verity\block\VerityBoxBlock.java:75: error: cannot find symbol
+            world.playSound(null, pos, SoundEvents.CHEST_CLOSE.value(), SoundSource.BLOCKS, 1f, 0.8f);
+                                                              ^
+  symbol:   method value()
+  location: variable CHEST_CLOSE of type SoundEvent
+C:\verity-src\verity\src\main\java\com\mod\verity\block\VerityBoxBlock.java:95: error: cannot find symbol
+        world.playSound(null, pos, SoundEvents.CHEST_OPEN.value(), SoundSource.BLOCKS, 1f, 0.6f);
+                                                         ^
+  symbol:   method value()
+  location: variable CHEST_OPEN of type SoundEvent
+C:\verity-src\verity\src\main\java\com\mod\verity\block\VerityBoxBlock.java:105: error: cannot find symbol
+        verity.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0f, 0f);
+              ^
+  symbol:   method moveTo(double,double,double,float,float)
+  location: variable verity of type VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:52: error: cannot find symbol
+    private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+                                                  ^
+  symbol:   variable GeckoLibUtil
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:54: error: cannot find symbol
+    private static final RawAnimation IDLE_ANIM   = RawAnimation.begin().thenLoop("animation.verity.idle");
+                                                    ^
+  symbol:   variable RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:55: error: cannot find symbol
+    private static final RawAnimation WALK_ANIM   = RawAnimation.begin().thenLoop("animation.verity.walk");
+                                                    ^
+  symbol:   variable RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:56: error: cannot find symbol
+    private static final RawAnimation STARE_ANIM  = RawAnimation.begin().thenLoop("animation.verity.stare");
+                                                    ^
+  symbol:   variable RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:57: error: cannot find symbol
+    private static final RawAnimation STAGE3_ANIM = RawAnimation.begin().thenLoop("animation.verity.stage3_idle");
+                                                    ^
+  symbol:   variable RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:58: error: cannot find symbol
+    private static final RawAnimation STAGE5_HUNT = RawAnimation.begin().thenLoop("animation.verity.stage5_hunt");
+                                                    ^
+  symbol:   variable RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:59: error: cannot find symbol
+    private static final RawAnimation STAGE5_IDLE = RawAnimation.begin().thenLoop("animation.verity.stage5_idle");
+                                                    ^
+  symbol:   variable RawAnimation
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:156: error: cannot find symbol
+            ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                        ^
+  symbol:   class ServerLevelData
+  location: package net.minecraft.server.level
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:165: error: cannot find symbol
+            ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                        ^
+  symbol:   class ServerLevelData
+  location: package net.minecraft.server.level
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:215: error: cannot find symbol
+        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                    ^
+  symbol:   class ServerLevelData
+  location: package net.minecraft.server.level
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:236: error: cannot find symbol
+        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                    ^
+  symbol:   class ServerLevelData
+  location: package net.minecraft.server.level
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:259: error: cannot find symbol
+        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                    ^
+  symbol:   class ServerLevelData
+  location: package net.minecraft.server.level
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:424: error: method does not override or implement a method from a supertype
+    @Override
+    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:426: error: cannot find symbol
+        instanceCache.add(new AnimationController<>(this, "controller", 5, state -> {
+                              ^
+  symbol:   class AnimationController
+  location: class VerityEntity
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:440: error: method does not override or implement a method from a supertype
+    @Override
+    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\state\VerityWorldState.java:18: error: cannot find symbol
+    private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "world_state");
+                                          ^
+  symbol:   variable Identifier
+  location: class VerityWorldState
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:33: error: method does not override or implement a method from a supertype
+    @Override
+    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:38: error: method does not override or implement a method from a supertype
+    @Override
+    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:49: error: method does not override or implement a method from a supertype
+    @Override
+    ^
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:65: error: cannot find symbol
+        return Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, path);
+               ^
+  symbol:   variable Identifier
+  location: class VerityModel
+C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityRenderer.java:16: error: cannot find symbol
+        this.shadowSize = 0.5f;
+            ^
+  symbol: variable shadowSize
+C:\verity-src\verity\src\main\java\com\mod\verity\event\ChatHandler.java:88: error: cannot find symbol
+        ServerLevel world = sender.serverLevel();
+                                  ^
+  symbol:   method serverLevel()
+  location: variable sender of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\event\ChatHandler.java:89: error: cannot find symbol
+        MinecraftServer srv = sender.getServer();
+                                    ^
+  symbol:   method getServer()
+  location: variable sender of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\event\SessionTracker.java:44: error: cannot find symbol
+            ServerLevel level   = player.serverLevel();
+                                        ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\event\SessionTracker.java:70: error: cannot find symbol
+            ServerLevel level   = player.serverLevel();
+                                        ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\state\PlayerSessionData.java:25: error: cannot find symbol
+    private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "player_sessions");
+                                          ^
+  symbol:   variable Identifier
+  location: class PlayerSessionData
+C:\verity-src\verity\src\main\java\com\mod\verity\mixin\WindowStalkingMixin.java:46: error: cannot find symbol
+        ServerLevel world = player.serverLevel();
+                                  ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\mixin\WindowStalkingMixin.java:116: error: cannot find symbol
+                return pos.toImmutable();
+                          ^
+  symbol:   method toImmutable()
+  location: variable pos of type BlockPos
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:41: error: cannot find symbol
+            ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity"),
+            ^
+  symbol:   variable ResourceLocation
+  location: class VerityMod
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:46: error: incompatible types: String cannot be converted to ResourceKey<EntityType<?>>
+                    .build("verity:verity")
+                           ^
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:84: error: cannot find symbol
+        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX);
+                                                   ^
+  symbol:   variable ResourceLocation
+  location: class VerityMod
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:85: error: cannot find symbol
+        Registry.register(BuiltInRegistries.ITEM,  ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX_ITEM);
+                                                   ^
+  symbol:   variable ResourceLocation
+  location: class VerityMod
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:88: error: cannot find symbol
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_orb"),       VERITY_ORB_ITEM);
+                                                  ^
+  symbol:   variable ResourceLocation
+  location: class VerityMod
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:89: error: cannot find symbol
+        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "twixxels_journal"), TWIXXELS_JOURNAL);
+                                                  ^
+  symbol:   variable ResourceLocation
+  location: class VerityMod
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:155: error: cannot find symbol
+            ServerLevel level = player.serverLevel();
+                                      ^
+  symbol:   method serverLevel()
+  location: variable player of type ServerPlayer
+C:\verity-src\verity\src\main\java\com\mod\verity\VerityModClient.java:36: error: method register in class EntityRendererRegistry cannot be applied to given types;
+        EntityRendererRegistry.register(VerityMod.VERITY, VerityRenderer::new);
+                              ^
+  required: EntityType<? extends E>,EntityRendererProvider<E>
+  found:    EntityType<VerityEntity>,VerityRenderer::new
+  reason: cannot infer type-variable(s) E
+    (argument mismatch; bad return type in method reference
+      VerityRenderer cannot be converted to EntityRenderer<E,?>)
+  where E is a type-variable:
+    E extends Entity declared in method <E>register(EntityType<? extends E>,EntityRendererProvider<E>)
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceListener.java:215: error: cannot find symbol
+        MinecraftClient.getInstance().execute(() -> {
+        ^
+  symbol:   variable MinecraftClient
+  location: class VoiceListener
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VerityVoiceManager.java:39: error: cannot find symbol
+            SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(Identifier.of("verity", soundName));
+                                                                      ^
+  symbol:   variable Identifier
+  location: class VerityVoiceManager
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VerityVoiceManager.java:125: error: cannot find symbol
+        return BuiltInRegistries.SOUND_EVENT.get(Identifier.of("verity", "hello")) != null;
+                                                 ^
+  symbol:   variable Identifier
+  location: class VerityVoiceManager
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:37: error: cannot find symbol
+            Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
+            ^
+  symbol:   variable Identifier
+  location: class VoiceHudRenderer
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:49: error: cannot find symbol
+        if (client.options.hudHidden) return;
+                          ^
+  symbol:   variable hudHidden
+  location: variable options of type Options
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoicePacket.java:32: error: cannot find symbol
+                        Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_query"));
+                        ^
+  symbol:   variable Identifier
+  location: class VoiceQueryPayload
+C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoicePacket.java:49: error: cannot find symbol
+        PayloadTypeRegistry.playC2S().register(VoiceQueryPayload.TYPE, VoiceQueryPayload.CODEC);
+                           ^
+  symbol:   method playC2S()
+  location: interface PayloadTypeRegistry
+Note: Some input files use or override a deprecated API.
+Note: Recompile with -Xlint:deprecation for details.
+Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+100 errors
+
+> Task :compileJava FAILED
+
+[Incubating] Problems report is available at: file:///C:/verity-src/verity/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':compileJava'.
+> Compilation failed; see the compiler output below.
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityModClient.java:36: error: method register in class EntityRendererRegistry cannot be applied to given types;
+          EntityRendererRegistry.register(VerityMod.VERITY, VerityRenderer::new);
+                                ^
+    required: EntityType<? extends E>,EntityRendererProvider<E>
+    found:    EntityType<VerityEntity>,VerityRenderer::new
+    reason: cannot infer type-variable(s) E
+      (argument mismatch; bad return type in method reference
+        VerityRenderer cannot be converted to EntityRenderer<E,?>)
+    where E is a type-variable:
+      E extends Entity declared in method <E>register(EntityType<? extends E>,EntityRendererProvider<E>)
+  Note: Recompile with -Xlint:deprecation for details.
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:46: error: incompatible types: String cannot be converted to ResourceKey<EntityType<?>>
+                      .build("verity:verity")
+                             ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:52: error: cannot find symbol
+      private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+                    ^
+    symbol:   class AnimatableInstanceCache
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:54: error: cannot find symbol
+      private static final RawAnimation IDLE_ANIM   = RawAnimation.begin().thenLoop("animation.verity.idle");
+                           ^
+    symbol:   class RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:55: error: cannot find symbol
+      private static final RawAnimation WALK_ANIM   = RawAnimation.begin().thenLoop("animation.verity.walk");
+                           ^
+    symbol:   class RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:56: error: cannot find symbol
+      private static final RawAnimation STARE_ANIM  = RawAnimation.begin().thenLoop("animation.verity.stare");
+                           ^
+    symbol:   class RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:57: error: cannot find symbol
+      private static final RawAnimation STAGE3_ANIM = RawAnimation.begin().thenLoop("animation.verity.stage3_idle");
+                           ^
+    symbol:   class RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:58: error: cannot find symbol
+      private static final RawAnimation STAGE5_HUNT = RawAnimation.begin().thenLoop("animation.verity.stage5_hunt");
+                           ^
+    symbol:   class RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:59: error: cannot find symbol
+      private static final RawAnimation STAGE5_IDLE = RawAnimation.begin().thenLoop("animation.verity.stage5_idle");
+                           ^
+    symbol:   class RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\state\VerityWorldState.java:6: error: cannot find symbol
+  import net.minecraft.util.Identifier;
+                           ^
+    symbol:   class Identifier
+    location: package net.minecraft.util
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:425: error: cannot find symbol
+      public void registerControllers(AnimatableInstanceCache instanceCache) {
+                                      ^
+    symbol:   class AnimatableInstanceCache
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:441: error: cannot find symbol
+      public AnimatableInstanceCache getAnimatableInstanceCache() { return cache; }
+             ^
+    symbol:   class AnimatableInstanceCache
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\state\VerityWorldState.java:18: error: cannot find symbol
+      private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "world_state");
+                           ^
+    symbol:   class Identifier
+    location: class VerityWorldState
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:5: error: cannot find symbol
+  import net.minecraft.util.Identifier;
+                           ^
+    symbol:   class Identifier
+    location: package net.minecraft.util
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:22: error: cannot find symbol
+      private static final Identifier MODEL_SPHERE       = id("geo/verity_sphere.geo.json");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:23: error: cannot find symbol
+      private static final Identifier MODEL_CAVE_DWELLER = id("geo/verity_cave_dweller.geo.json");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:25: error: cannot find symbol
+      private static final Identifier TEX_STAGE1 = id("textures/entity/verity_sphere_stage1.png");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:26: error: cannot find symbol
+      private static final Identifier TEX_STAGE2 = id("textures/entity/verity_sphere_stage2.png");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:27: error: cannot find symbol
+      private static final Identifier TEX_STAGE3 = id("textures/entity/verity_sphere_stage3.png");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:28: error: cannot find symbol
+      private static final Identifier TEX_STAGE4 = id("textures/entity/verity_sphere_stage4.png");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:29: error: cannot find symbol
+      private static final Identifier TEX_STAGE5 = id("textures/entity/verity_cave_dweller.png");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:31: error: cannot find symbol
+      private static final Identifier ANIMATIONS  = id("animations/verity.animation.json");
+                           ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:34: error: cannot find symbol
+      public Identifier getModelResource(VerityEntity entity) {
+             ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:39: error: cannot find symbol
+      public Identifier getTextureResource(VerityEntity entity) {
+             ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:50: error: cannot find symbol
+      public Identifier getAnimationResource(VerityEntity entity) {
+             ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:64: error: cannot find symbol
+      private static Identifier id(String path) {
+                     ^
+    symbol:   class Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\state\PlayerSessionData.java:6: error: cannot find symbol
+  import net.minecraft.util.Identifier;
+                           ^
+    symbol:   class Identifier
+    location: package net.minecraft.util
+  C:\verity-src\verity\src\main\java\com\mod\verity\state\PlayerSessionData.java:25: error: cannot find symbol
+      private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "player_sessions");
+                           ^
+    symbol:   class Identifier
+    location: class PlayerSessionData
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:16: error: cannot find symbol
+  import net.minecraft.resources.ResourceLocation;
+                                ^
+    symbol:   class ResourceLocation
+    location: package net.minecraft.resources
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VerityVoiceManager.java:5: error: cannot find symbol
+  import net.minecraft.util.Identifier;
+                           ^
+    symbol:   class Identifier
+    location: package net.minecraft.util
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:12: error: cannot find symbol
+  import net.minecraft.util.Identifier;
+                           ^
+    symbol:   class Identifier
+    location: package net.minecraft.util
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:42: error: cannot find symbol
+      private static void render(GuiGraphicsExtractor context, DeltaTracker tickDelta) {
+                                 ^
+    symbol:   class GuiGraphicsExtractor
+    location: class VoiceHudRenderer
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoicePacket.java:9: error: cannot find symbol
+  import net.minecraft.util.Identifier;
+                           ^
+    symbol:   class Identifier
+    location: package net.minecraft.util
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:238: error: cannot find symbol
+                          net.minecraft.resources.ResourceLocation.tryParse("minecraft:" + entry.mcId()));
+                                                 ^
+    symbol:   class ResourceLocation
+    location: package net.minecraft.resources
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:534: error: cannot find symbol
+                  net.minecraft.world.entity.npc.Villager.class, player.getBoundingBox().inflate(6), e -> true);
+                                                ^
+    symbol:   class Villager
+    location: package net.minecraft.world.entity.npc
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:628: error: cannot find symbol
+                      ResourceLocation.tryParse("minecraft:" +
+                      ^
+    symbol:   variable ResourceLocation
+    location: class VerityAssistant
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:52: error: cannot find symbol
+      private final AnimatableInstanceCache cache = GeckoLibUtil.createInstanceCache(this);
+                                                    ^
+    symbol:   variable GeckoLibUtil
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:54: error: cannot find symbol
+      private static final RawAnimation IDLE_ANIM   = RawAnimation.begin().thenLoop("animation.verity.idle");
+                                                      ^
+    symbol:   variable RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:55: error: cannot find symbol
+      private static final RawAnimation WALK_ANIM   = RawAnimation.begin().thenLoop("animation.verity.walk");
+                                                      ^
+    symbol:   variable RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:56: error: cannot find symbol
+      private static final RawAnimation STARE_ANIM  = RawAnimation.begin().thenLoop("animation.verity.stare");
+                                                      ^
+    symbol:   variable RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:57: error: cannot find symbol
+      private static final RawAnimation STAGE3_ANIM = RawAnimation.begin().thenLoop("animation.verity.stage3_idle");
+                                                      ^
+    symbol:   variable RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:58: error: cannot find symbol
+      private static final RawAnimation STAGE5_HUNT = RawAnimation.begin().thenLoop("animation.verity.stage5_hunt");
+                                                      ^
+    symbol:   variable RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:59: error: cannot find symbol
+      private static final RawAnimation STAGE5_IDLE = RawAnimation.begin().thenLoop("animation.verity.stage5_idle");
+                                                      ^
+    symbol:   variable RawAnimation
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:156: error: cannot find symbol
+              ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                          ^
+    symbol:   class ServerLevelData
+    location: package net.minecraft.server.level
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:165: error: cannot find symbol
+              ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                          ^
+    symbol:   class ServerLevelData
+    location: package net.minecraft.server.level
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:215: error: cannot find symbol
+          ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                      ^
+    symbol:   class ServerLevelData
+    location: package net.minecraft.server.level
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:236: error: cannot find symbol
+          ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                      ^
+    symbol:   class ServerLevelData
+    location: package net.minecraft.server.level
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:259: error: cannot find symbol
+          ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+                                      ^
+    symbol:   class ServerLevelData
+    location: package net.minecraft.server.level
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:426: error: cannot find symbol
+          instanceCache.add(new AnimationController<>(this, "controller", 5, state -> {
+                                ^
+    symbol:   class AnimationController
+    location: class VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\state\VerityWorldState.java:18: error: cannot find symbol
+      private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "world_state");
+                                            ^
+    symbol:   variable Identifier
+    location: class VerityWorldState
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:65: error: cannot find symbol
+          return Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, path);
+                 ^
+    symbol:   variable Identifier
+    location: class VerityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\state\PlayerSessionData.java:25: error: cannot find symbol
+      private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "player_sessions");
+                                            ^
+    symbol:   variable Identifier
+    location: class PlayerSessionData
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:41: error: cannot find symbol
+              ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity"),
+              ^
+    symbol:   variable ResourceLocation
+    location: class VerityMod
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:84: error: cannot find symbol
+          Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX);
+                                                     ^
+    symbol:   variable ResourceLocation
+    location: class VerityMod
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:85: error: cannot find symbol
+          Registry.register(BuiltInRegistries.ITEM,  ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX_ITEM);
+                                                     ^
+    symbol:   variable ResourceLocation
+    location: class VerityMod
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:88: error: cannot find symbol
+          Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_orb"),       VERITY_ORB_ITEM);
+                                                    ^
+    symbol:   variable ResourceLocation
+    location: class VerityMod
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:89: error: cannot find symbol
+          Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "twixxels_journal"), TWIXXELS_JOURNAL);
+                                                    ^
+    symbol:   variable ResourceLocation
+    location: class VerityMod
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceListener.java:215: error: cannot find symbol
+          MinecraftClient.getInstance().execute(() -> {
+          ^
+    symbol:   variable MinecraftClient
+    location: class VoiceListener
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VerityVoiceManager.java:39: error: cannot find symbol
+              SoundEvent soundEvent = BuiltInRegistries.SOUND_EVENT.get(Identifier.of("verity", soundName));
+                                                                        ^
+    symbol:   variable Identifier
+    location: class VerityVoiceManager
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VerityVoiceManager.java:125: error: cannot find symbol
+          return BuiltInRegistries.SOUND_EVENT.get(Identifier.of("verity", "hello")) != null;
+                                                   ^
+    symbol:   variable Identifier
+    location: class VerityVoiceManager
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:37: error: cannot find symbol
+              Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
+              ^
+    symbol:   variable Identifier
+    location: class VoiceHudRenderer
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:49: error: cannot find symbol
+          if (client.options.hudHidden) return;
+                            ^
+    symbol:   variable hudHidden
+    location: variable options of type Options
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoicePacket.java:32: error: cannot find symbol
+                          Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_query"));
+                          ^
+    symbol:   variable Identifier
+    location: class VoiceQueryPayload
+  Note: Some input files use or override a deprecated API.
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:424: error: method does not override or implement a method from a supertype
+      @Override
+      ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:440: error: method does not override or implement a method from a supertype
+      @Override
+      ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:33: error: method does not override or implement a method from a supertype
+      @Override
+      ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:38: error: method does not override or implement a method from a supertype
+      @Override
+      ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:49: error: method does not override or implement a method from a supertype
+      @Override
+      ^
+  Note: Some messages have been simplified; recompile with -Xdiags:verbose to get full output
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:47: error: cannot find symbol
+  public class VerityEntity extends Monster implements GeoAnimatable {
+                                                       ^
+    symbol: class GeoAnimatable
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:20: error: cannot find symbol
+  public class VerityModel extends GeoEntityModel<VerityEntity> {
+                                   ^
+    symbol: class GeoEntityModel
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityRenderer.java:12: error: cannot find symbol
+  public class VerityRenderer extends GeoEntityRenderer<VerityEntity> {
+                                      ^
+    symbol: class GeoEntityRenderer
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityRenderer.java:16: error: cannot find symbol
+          this.shadowSize = 0.5f;
+              ^
+    symbol: variable shadowSize
+  C:\verity-src\verity\src\main\java\com\mod\verity\ai\PromptSystem.java:108: error: cannot find symbol
+          String dimension = dim.location().getPath();
+                                ^
+    symbol:   method location()
+    location: variable dim of type ResourceKey<Level>
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:114: error: cannot find symbol
+              ServerLevel world   = player.serverLevel();
+                                          ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:165: error: cannot find symbol
+              ServerLevel world = player.serverLevel();
+                                        ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:223: error: cannot find symbol
+              ServerLevel world    = player.serverLevel();
+                                           ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:274: error: cannot find symbol
+          ServerLevel world = player.serverLevel();
+                                    ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:328: error: cannot find symbol
+              ServerLevel world = player.serverLevel();
+                                        ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\assistant\VerityAssistant.java:532: error: cannot find symbol
+          ServerLevel world = player.serverLevel();
+                                    ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\block\VerityBoxBlock.java:75: error: cannot find symbol
+              world.playSound(null, pos, SoundEvents.CHEST_CLOSE.value(), SoundSource.BLOCKS, 1f, 0.8f);
+                                                                ^
+    symbol:   method value()
+    location: variable CHEST_CLOSE of type SoundEvent
+  C:\verity-src\verity\src\main\java\com\mod\verity\block\VerityBoxBlock.java:95: error: cannot find symbol
+          world.playSound(null, pos, SoundEvents.CHEST_OPEN.value(), SoundSource.BLOCKS, 1f, 0.6f);
+                                                           ^
+    symbol:   method value()
+    location: variable CHEST_OPEN of type SoundEvent
+  C:\verity-src\verity\src\main\java\com\mod\verity\block\VerityBoxBlock.java:105: error: cannot find symbol
+          verity.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0f, 0f);
+                ^
+    symbol:   method moveTo(double,double,double,float,float)
+    location: variable verity of type VerityEntity
+  C:\verity-src\verity\src\main\java\com\mod\verity\event\ChatHandler.java:88: error: cannot find symbol
+          ServerLevel world = sender.serverLevel();
+                                    ^
+    symbol:   method serverLevel()
+    location: variable sender of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\event\ChatHandler.java:89: error: cannot find symbol
+          MinecraftServer srv = sender.getServer();
+                                      ^
+    symbol:   method getServer()
+    location: variable sender of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\event\SessionTracker.java:44: error: cannot find symbol
+              ServerLevel level   = player.serverLevel();
+                                          ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\event\SessionTracker.java:70: error: cannot find symbol
+              ServerLevel level   = player.serverLevel();
+                                          ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\mixin\WindowStalkingMixin.java:46: error: cannot find symbol
+          ServerLevel world = player.serverLevel();
+                                    ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\mixin\WindowStalkingMixin.java:116: error: cannot find symbol
+                  return pos.toImmutable();
+                            ^
+    symbol:   method toImmutable()
+    location: variable pos of type BlockPos
+  C:\verity-src\verity\src\main\java\com\mod\verity\VerityMod.java:155: error: cannot find symbol
+              ServerLevel level = player.serverLevel();
+                                        ^
+    symbol:   method serverLevel()
+    location: variable player of type ServerPlayer
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoicePacket.java:49: error: cannot find symbol
+          PayloadTypeRegistry.playC2S().register(VoiceQueryPayload.TYPE, VoiceQueryPayload.CODEC);
+                             ^
+    symbol:   method playC2S()
+    location: interface PayloadTypeRegistry
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:27: error: package software.bernie.geckolib.animatable does not exist
+  import software.bernie.geckolib.animatable.GeoAnimatable;
+                                            ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:28: error: package software.bernie.geckolib.animatable.instance does not exist
+  import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
+                                                     ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:30: error: package software.bernie.geckolib.animation does not exist
+  import software.bernie.geckolib.animation.AnimationState;
+                                           ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:31: error: package software.bernie.geckolib.util does not exist
+  import software.bernie.geckolib.util.GeckoLibUtil;
+                                      ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:335: error: package net.minecraft.util.valueinput does not exist
+      public void readAdditionalSaveData(net.minecraft.util.valueinput.ValueInput input) {
+                                                                      ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:343: error: package net.minecraft.util.valueoutput does not exist
+      public void addAdditionalSaveData(net.minecraft.util.valueoutput.ValueOutput output) {
+                                                                      ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityEntity.java:29: error: package software.bernie.geckolib.animation does not exist
+  import software.bernie.geckolib.animation.*;
+                                 ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityModel.java:7: error: package software.bernie.geckolib.model does not exist
+  import software.bernie.geckolib.model.GeoEntityModel;
+                                       ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\entity\VerityRenderer.java:4: error: package software.bernie.geckolib.renderer does not exist
+  import software.bernie.geckolib.renderer.GeoEntityRenderer;
+                                          ^
+  C:\verity-src\verity\src\main\java\com\mod\verity\voice\VoiceHudRenderer.java:10: error: package net.fabricmc.fabric.api.client.rendering.v1.gui does not exist
+  import net.fabricmc.fabric.api.client.rendering.v1.gui.GuiGraphicsExtractor;
+                                                        ^
+  100 errors
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to generate a Build Scan (powered by Develocity).
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.2.0/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 6s
+1 actionable task: 1 executed
+PS C:\verity-src\verity>

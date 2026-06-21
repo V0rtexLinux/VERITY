@@ -4,9 +4,8 @@ import com.mod.verity.VerityMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
-import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -29,7 +28,7 @@ public class VoicePacket {
 
         public static final CustomPacketPayload.Type<VoiceQueryPayload> TYPE =
                 new CustomPacketPayload.Type<>(
-                        Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_query"));
+                        ResourceLocation.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_query"));
 
         public static final StreamCodec<FriendlyByteBuf, VoiceQueryPayload> CODEC =
                 StreamCodec.of(
@@ -46,8 +45,6 @@ public class VoicePacket {
     //  Server-side registration                                            //
     // ------------------------------------------------------------------ //
     public static void registerServer() {
-        PayloadTypeRegistry.playC2S().register(VoiceQueryPayload.TYPE, VoiceQueryPayload.CODEC);
-
         ServerPlayNetworking.registerGlobalReceiver(VoiceQueryPayload.TYPE,
                 (payload, context) -> {
                     String query = payload.query().trim();

@@ -43,7 +43,7 @@ public abstract class WindowStalkingMixin {
     @Inject(method = "tick", at = @At("TAIL"))
     private void onTick(CallbackInfo ci) {
         ServerPlayer player = (ServerPlayer) (Object) this;
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = (ServerLevel) player.level();
 
         VerityWorldState state = VerityWorldState.getOrCreate(world);
         if (state.isVerityLost()) return;
@@ -113,7 +113,7 @@ public abstract class WindowStalkingMixin {
         int r = (int) GLASS_SCAN_RANGE;
         for (BlockPos pos : BlockPos.betweenClosed(origin.offset(-r, -2, -r), origin.offset(r, 2, r))) {
             if (isGlass(world, pos)) {
-                return pos.toImmutable();
+                return pos.immutable();
             }
         }
         return null;

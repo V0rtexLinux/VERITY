@@ -2,7 +2,7 @@ package com.mod.verity.entity;
 
 import com.mod.verity.VerityMod;
 import com.mod.verity.state.VerityWorldState;
-import net.minecraft.util.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import software.bernie.geckolib.model.GeoEntityModel;
 
@@ -19,24 +19,24 @@ import software.bernie.geckolib.model.GeoEntityModel;
  */
 public class VerityModel extends GeoEntityModel<VerityEntity> {
 
-    private static final Identifier MODEL_SPHERE       = id("geo/verity_sphere.geo.json");
-    private static final Identifier MODEL_CAVE_DWELLER = id("geo/verity_cave_dweller.geo.json");
+    private static final ResourceLocation MODEL_SPHERE       = id("geo/verity_sphere.geo.json");
+    private static final ResourceLocation MODEL_CAVE_DWELLER = id("geo/verity_cave_dweller.geo.json");
 
-    private static final Identifier TEX_STAGE1 = id("textures/entity/verity_sphere_stage1.png");
-    private static final Identifier TEX_STAGE2 = id("textures/entity/verity_sphere_stage2.png");
-    private static final Identifier TEX_STAGE3 = id("textures/entity/verity_sphere_stage3.png");
-    private static final Identifier TEX_STAGE4 = id("textures/entity/verity_sphere_stage4.png");
-    private static final Identifier TEX_STAGE5 = id("textures/entity/verity_cave_dweller.png");
+    private static final ResourceLocation TEX_STAGE1 = id("textures/entity/verity_sphere_stage1.png");
+    private static final ResourceLocation TEX_STAGE2 = id("textures/entity/verity_sphere_stage2.png");
+    private static final ResourceLocation TEX_STAGE3 = id("textures/entity/verity_sphere_stage3.png");
+    private static final ResourceLocation TEX_STAGE4 = id("textures/entity/verity_sphere_stage4.png");
+    private static final ResourceLocation TEX_STAGE5 = id("textures/entity/verity_cave_dweller.png");
 
-    private static final Identifier ANIMATIONS  = id("animations/verity.animation.json");
+    private static final ResourceLocation ANIMATIONS  = id("animations/verity.animation.json");
 
     @Override
-    public Identifier getModelResource(VerityEntity entity) {
+    public ResourceLocation getModelResource(VerityEntity entity) {
         return getStage(entity) >= 5 ? MODEL_CAVE_DWELLER : MODEL_SPHERE;
     }
 
     @Override
-    public Identifier getTextureResource(VerityEntity entity) {
+    public ResourceLocation getTextureResource(VerityEntity entity) {
         return switch (getStage(entity)) {
             case 1  -> TEX_STAGE1;
             case 2  -> TEX_STAGE2;
@@ -47,7 +47,7 @@ public class VerityModel extends GeoEntityModel<VerityEntity> {
     }
 
     @Override
-    public Identifier getAnimationResource(VerityEntity entity) {
+    public ResourceLocation getAnimationResource(VerityEntity entity) {
         return ANIMATIONS;
     }
 
@@ -61,7 +61,7 @@ public class VerityModel extends GeoEntityModel<VerityEntity> {
         return 1;
     }
 
-    private static Identifier id(String path) {
-        return Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, path);
+    private static ResourceLocation id(String path) {
+        return ResourceLocation.fromNamespaceAndPath(VerityMod.MOD_ID, path);
     }
 }

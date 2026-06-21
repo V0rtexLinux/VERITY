@@ -85,8 +85,8 @@ public class ChatHandler {
         if (!m.matches()) return true;
 
         String query    = m.group(2).trim();
-        ServerLevel world = sender.serverLevel();
-        MinecraftServer srv = sender.getServer();
+        ServerLevel world = (ServerLevel) sender.level();
+        MinecraftServer srv = world.getServer();
 
         notifyEntity(world);
         CompletableFuture.runAsync(() -> handleQuery(query, sender, world, srv));
@@ -100,7 +100,7 @@ public class ChatHandler {
                                          ServerLevel world, MinecraftServer server) {
         notifyEntity(world);
         world.playSound(null, player.blockPosition(),
-                SoundEvents.NOTE_BLOCK_CHIME.value(),
+                SoundEvents.NOTE_BLOCK_CHIME,
                 SoundSource.PLAYERS, 0.3f, 2.0f);
         CompletableFuture.runAsync(() -> handleQuery(query, player, world, server));
     }

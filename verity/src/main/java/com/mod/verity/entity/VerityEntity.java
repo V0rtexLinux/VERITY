@@ -25,6 +25,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.damagesource.DamageSource;
 import software.bernie.geckolib.animatable.GeoAnimatable;
+import software.bernie.geckolib.animatable.AnimatableManager;
 import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.animation.*;
 import software.bernie.geckolib.animation.AnimationState;
@@ -153,7 +154,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
         }
         if (days == 4 && stage == 2) {
             state.setCurrentStage(3);
-            ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+            ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
             broadcastHorror(world, "§6[Verity]§r §7I know you ate pizza yesterday.");
         }
         if (days == 6 && stage == 3) {
@@ -162,7 +163,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
         }
         if (days == 8 && stage == 4) {
             state.setCurrentStage(5);
-            ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+            ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
             broadcastHorror(world, "§4[Verity]§r §c...");
         }
     }
@@ -212,7 +213,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage3(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(true);
-        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+        ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
 
         alarmCooldown--;
         if (alarmCooldown <= 0) {
@@ -233,7 +234,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage4(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(true);
-        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+        ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
 
         if (world.players().size() > 1 && state.getDaysElapsed() < 4) {
             state.triggerInvitedFriendEarly();
@@ -256,7 +257,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage5(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(false);
-        ((net.minecraft.server.level.ServerLevelData) world.getLevelData()).setRaining(true);
+        ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
 
         if (this.getHealth() < 2000.0f) this.setHealth(2000.0f);
 
@@ -422,8 +423,8 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     //  GeckoLib                                                            //
     // ------------------------------------------------------------------ //
     @Override
-    public void registerControllers(AnimatableInstanceCache instanceCache) {
-        instanceCache.add(new AnimationController<>(this, "controller", 5, state -> {
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "controller", 5, state -> {
             if (!this.level().isClientSide()) {
                 VerityWorldState ws = VerityWorldState.getOrCreate(
                         (ServerLevel) this.level());

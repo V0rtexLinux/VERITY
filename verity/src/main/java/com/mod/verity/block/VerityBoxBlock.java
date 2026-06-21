@@ -72,7 +72,7 @@ public class VerityBoxBlock extends Block {
                              pos.getX() + r, pos.getY() + r, pos.getZ() + r),
                     e -> true)
                     .forEach(e -> e.discard());
-            world.playSound(null, pos, SoundEvents.CHEST_CLOSE.value(), SoundSource.BLOCKS, 1f, 0.8f);
+            world.playSound(null, pos, SoundEvents.CHEST_CLOSE, SoundSource.BLOCKS, 1f, 0.8f);
             // Private: only the player sealing him sees the message
             player.sendSystemMessage(Component.literal("§a[Verity]§r §7...sealed."));
             return InteractionResult.SUCCESS;
@@ -92,7 +92,7 @@ public class VerityBoxBlock extends Block {
     }
 
     private void openBox(ServerLevel world, BlockPos pos, Player player) {
-        world.playSound(null, pos, SoundEvents.CHEST_OPEN.value(), SoundSource.BLOCKS, 1f, 0.6f);
+        world.playSound(null, pos, SoundEvents.CHEST_OPEN, SoundSource.BLOCKS, 1f, 0.6f);
         world.sendParticles(ParticleTypes.END_ROD,
                 pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5,
                 20, 0.3, 0.3, 0.3, 0.1);
@@ -102,7 +102,7 @@ public class VerityBoxBlock extends Block {
             VerityMod.LOGGER.error("[Verity] Failed to create VerityEntity!");
             return;
         }
-        verity.moveTo(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 0f, 0f);
+        verity.setPos(pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5);
         world.addFreshEntity(verity);
 
         VerityWorldState ws = VerityWorldState.getOrCreate(world);

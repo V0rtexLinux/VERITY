@@ -111,7 +111,7 @@ public class VerityAssistant {
         sendPrivate(player, prefix(stage) + " §7A procurar " + entry.displayName + "§7...");
 
         CompletableFuture.runAsync(() -> {
-            ServerLevel world   = player.serverLevel();
+            ServerLevel world   = (ServerLevel) player.level();
             BlockPos origin     = player.blockPosition();
             int radius = 64, vertRange = 64;
 
@@ -146,7 +146,7 @@ public class VerityAssistant {
                             result.getX(), result.getY(), result.getZ(),
                             dist, dx, dy, dz));
                     if (stage >= 3) {
-                        world.playSound(null, result, SoundEvents.NOTE_BLOCK_PLING.value(),
+                        world.playSound(null, result, SoundEvents.NOTE_BLOCK_PLING,
                                 SoundSource.BLOCKS, 1f, 2f);
                     }
                 }
@@ -162,7 +162,7 @@ public class VerityAssistant {
                                    MinecraftServer server, int stage) {
         sendPrivate(player, prefix(stage) + " §7A escanear todos os minérios perto de ti...");
         CompletableFuture.runAsync(() -> {
-            ServerLevel world = player.serverLevel();
+            ServerLevel world = (ServerLevel) player.level();
             BlockPos origin   = player.blockPosition();
             int radius = 48, vertRange = 48;
 
@@ -220,7 +220,7 @@ public class VerityAssistant {
         }
 
         CompletableFuture.runAsync(() -> {
-            ServerLevel world    = player.serverLevel();
+            ServerLevel world    = (ServerLevel) player.level();
             BlockPos playerPos   = player.blockPosition();
             Registry<Structure> reg = server.registryAccess().lookupOrThrow(Registries.STRUCTURE);
 
@@ -271,7 +271,7 @@ public class VerityAssistant {
 
     public static void combatRadar(ServerPlayer player,
                                    MinecraftServer server, int stage) {
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = (ServerLevel) player.level();
         var hostiles = world.getEntitiesOfClass(
                 net.minecraft.world.entity.monster.Monster.class,
                 player.getBoundingBox().inflate(64), e -> true);
@@ -325,7 +325,7 @@ public class VerityAssistant {
                 prefix(stage), shape, blockName, size));
 
         CompletableFuture.runAsync(() -> {
-            ServerLevel world = player.serverLevel();
+            ServerLevel world = (ServerLevel) player.level();
             BlockPos origin   = player.blockPosition();
             Vec3 look  = player.getLookAngle();
             int fx = (int) Math.round(look.x);
@@ -353,7 +353,7 @@ public class VerityAssistant {
             server.execute(() -> {
                 sendPrivate(player, String.format("%s §f%d blocos de §f%s §fcolocados!",
                         prefix(stage), positions.size(), blockName));
-                world.playSound(null, origin, SoundEvents.NOTE_BLOCK_BELL.value(),
+                world.playSound(null, origin, SoundEvents.NOTE_BLOCK_BELL,
                         SoundSource.BLOCKS, 0.8f, 1.2f);
             });
         });
@@ -529,7 +529,7 @@ public class VerityAssistant {
 
     public static void evaluateTrade(ServerPlayer player,
                                      MinecraftServer server, int stage) {
-        ServerLevel world = player.serverLevel();
+        ServerLevel world = (ServerLevel) player.level();
         var villagers = world.getEntitiesOfClass(
                 net.minecraft.world.entity.npc.Villager.class, player.getBoundingBox().inflate(6), e -> true);
 

@@ -41,7 +41,7 @@ public class SessionTracker {
         ServerPlayer player = handler.player;
 
         server.execute(() -> {
-            ServerLevel level   = player.serverLevel();
+            ServerLevel level   = (ServerLevel) player.level();
             PlayerSessionData sessions = PlayerSessionData.getOrCreate(level);
             VerityWorldState state     = VerityWorldState.getOrCreate(level);
 
@@ -67,7 +67,7 @@ public class SessionTracker {
         ServerPlayer player = handler.player;
 
         server.execute(() -> {
-            ServerLevel level   = player.serverLevel();
+            ServerLevel level   = (ServerLevel) player.level();
             PlayerSessionData sessions = PlayerSessionData.getOrCreate(level);
             VerityWorldState state     = VerityWorldState.getOrCreate(level);
 
