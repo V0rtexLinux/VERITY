@@ -24,7 +24,7 @@ dependencies {
     implementation "net.fabricmc:fabric-loader:${project.loader_version}"
     implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation fileTree(dir: 'libs', include: ['*.jar'])
+    fileTree(dir: 'libs', include: ['*.jar']).each { modImplementation files(it) }
 
     implementation "com.google.code.gson:gson:2.10.1"
 }
