@@ -1,23 +1,90 @@
 package com.mod.verity.state;
 
-import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraft.world.level.saveddata.SavedData.Factory;
+import net.minecraft.world.level.saveddata.SavedDataType;
 
 /**
  * Persistent server-side state for the full 5-stage Verity lifecycle + yandere system.
  *
- * Migrated from PersistentState (1.20.1 Yarn) → SavedData (26.1.2 Mojang mappings).
+ * Migrated from PersistentState (1.20.1 Yarn) → SavedData + SavedDataType + Codec (26.1.2).
+ * SavedData.Factory was removed in 26.1; use SavedDataType with a RecordCodecBuilder codec.
  */
 public class VerityWorldState extends SavedData {
 
     private static final String KEY = "verity_world_state";
 
-    public static final Factory<VerityWorldState> FACTORY = new Factory<>(
-            VerityWorldState::new,
-            (tag, registries) -> load(tag)
+    // ------------------------------------------------------------------ //
+    //  Nested record to hold yandere/extra fields (RecordCodecBuilder     //
+    //  supports up to 16 fields per group; extras are nested here)        //
+    // ------------------------------------------------------------------ //
+    record YandereState(int ignoredTicks, int attachmentScore, int jealousyScore,
+                        long lonelinessTicks, boolean yandereMode, int rejectionCount) {}
+
+    private static final Codec<YandereState> YANDERE_CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.INT.optionalFieldOf("ignoredTicks",    0).forGetter(YandereState::ignoredTicks),
+            Codec.INT.optionalFieldOf("attachmentScore", 30).forGetter(YandereState::attachmentScore),
+            Codec.INT.optionalFieldOf("jealousyScore",   0).forGetter(YandereState::jealousyScore),
+            Codec.LONG.optionalFieldOf("lonelinessTicks", 0L).forGetter(YandereState::lonelinessTicks),
+            Codec.BOOL.optionalFieldOf("yandereMode",    false).forGetter(YandereState::yandereMode),
+            Codec.INT.optionalFieldOf("rejectionCount",  0).forGetter(YandereState::rejectionCount)
+    ).apply(i, YandereState::new));
+
+    private static final Codec<VerityWorldState> CODEC = RecordCodecBuilder.create(i -> i.group(
+            Codec.INT.optionalFieldOf("currentStage",           1).forGetter(s -> s.currentStage),
+            Codec.INT.optionalFieldOf("daysElapsed",            0).forGetter(s -> s.daysElapsed),
+            Codec.INT.optionalFieldOf("trustValue",            50).forGetter(s -> s.trustValue),
+            Codec.BOOL.optionalFieldOf("hasEatenPizza",     false).forGetter(s -> s.hasEatenPizza),
+            Codec.DOUBLE.optionalFieldOf("playerHomeX",       0.0).forGetter(s -> s.playerHomeX),
+            Codec.DOUBLE.optionalFieldOf("playerHomeY",      64.0).forGetter(s -> s.playerHomeY),
+            Codec.DOUBLE.optionalFieldOf("playerHomeZ",       0.0).forGetter(s -> s.playerHomeZ),
+            Codec.INT.optionalFieldOf("calmTicks",             0).forGetter(s -> s.calmTicks),
+            Codec.BOOL.optionalFieldOf("verityLost",       false).forGetter(s -> s.verityLost),
+            Codec.BOOL.optionalFieldOf("askedAboutEastVillage", false).forGetter(s -> s.askedAboutEastVillage),
+            Codec.BOOL.optionalFieldOf("leftVerity",       false).forGetter(s -> s.leftVerity),
+            Codec.BOOL.optionalFieldOf("invitedFriendEarly", false).forGetter(s -> s.invitedFriendEarly),
+            Codec.BOOL.optionalFieldOf("madeAngry",        false).forGetter(s -> s.madeAngry),
+            Codec.INT.optionalFieldOf("dreadScore",            0).forGetter(s -> s.dreadScore),
+            Codec.INT.optionalFieldOf("proximityTicks",        0).forGetter(s -> s.proximityTicks),
+            YANDERE_CODEC.fieldOf("yandere").forGetter(s -> new YandereState(
+                    s.ignoredTicks, s.attachmentScore, s.jealousyScore,
+                    s.lonelinessTicks, s.yandereMode, s.rejectionCount))
+    ).apply(i, (currentStage, daysElapsed, trustValue, hasEatenPizza,
+                playerHomeX, playerHomeY, playerHomeZ, calmTicks, verityLost,
+                askedAboutEastVillage, leftVerity, invitedFriendEarly, madeAngry,
+                dreadScore, proximityTicks, yandere) -> {
+        VerityWorldState s = new VerityWorldState();
+        s.currentStage          = currentStage;
+        s.daysElapsed           = daysElapsed;
+        s.trustValue            = trustValue;
+        s.hasEatenPizza         = hasEatenPizza;
+        s.playerHomeX           = playerHomeX;
+        s.playerHomeY           = playerHomeY;
+        s.playerHomeZ           = playerHomeZ;
+        s.calmTicks             = calmTicks;
+        s.verityLost            = verityLost;
+        s.askedAboutEastVillage = askedAboutEastVillage;
+        s.leftVerity            = leftVerity;
+        s.invitedFriendEarly    = invitedFriendEarly;
+        s.madeAngry             = madeAngry;
+        s.dreadScore            = dreadScore;
+        s.proximityTicks        = proximityTicks;
+        s.ignoredTicks          = yandere.ignoredTicks();
+        s.attachmentScore       = yandere.attachmentScore();
+        s.jealousyScore         = yandere.jealousyScore();
+        s.lonelinessTicks       = yandere.lonelinessTicks();
+        s.yandereMode           = yandere.yandereMode();
+        s.rejectionCount        = yandere.rejectionCount();
+        return s;
+    }));
+
+    public static final SavedDataType<VerityWorldState> TYPE = new SavedDataType<>(
+            KEY,
+            ctx -> new VerityWorldState(),
+            ctx -> CODEC,
+            null
     );
 
     // ------------------------------------------------------------------ //
@@ -57,59 +124,7 @@ public class VerityWorldState extends SavedData {
     //  Factory / loading                                                   //
     // ------------------------------------------------------------------ //
     public static VerityWorldState getOrCreate(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(FACTORY, KEY);
-    }
-
-    private static VerityWorldState load(CompoundTag nbt) {
-        VerityWorldState s = new VerityWorldState();
-        s.currentStage          = nbt.getInt("currentStage");
-        s.daysElapsed           = nbt.getInt("daysElapsed");
-        s.trustValue            = nbt.getInt("trustValue");
-        s.hasEatenPizza         = nbt.getBoolean("hasEatenPizza");
-        s.playerHomeX           = nbt.getDouble("playerHomeX");
-        s.playerHomeY           = nbt.getDouble("playerHomeY");
-        s.playerHomeZ           = nbt.getDouble("playerHomeZ");
-        s.calmTicks             = nbt.getInt("calmTicks");
-        s.verityLost            = nbt.getBoolean("verityLost");
-        s.askedAboutEastVillage = nbt.getBoolean("askedAboutEastVillage");
-        s.leftVerity            = nbt.getBoolean("leftVerity");
-        s.invitedFriendEarly    = nbt.getBoolean("invitedFriendEarly");
-        s.madeAngry             = nbt.getBoolean("madeAngry");
-        s.dreadScore            = nbt.getInt("dreadScore");
-        s.proximityTicks        = nbt.getInt("proximityTicks");
-        s.ignoredTicks          = nbt.getInt("ignoredTicks");
-        s.attachmentScore       = nbt.getInt("attachmentScore");
-        s.jealousyScore         = nbt.getInt("jealousyScore");
-        s.lonelinessTicks       = nbt.getLong("lonelinessTicks");
-        s.yandereMode           = nbt.getBoolean("yandereMode");
-        s.rejectionCount        = nbt.getInt("rejectionCount");
-        return s;
-    }
-
-    @Override
-    public CompoundTag save(CompoundTag nbt, HolderLookup.Provider registries) {
-        nbt.putInt("currentStage",              currentStage);
-        nbt.putInt("daysElapsed",               daysElapsed);
-        nbt.putInt("trustValue",                trustValue);
-        nbt.putBoolean("hasEatenPizza",         hasEatenPizza);
-        nbt.putDouble("playerHomeX",            playerHomeX);
-        nbt.putDouble("playerHomeY",            playerHomeY);
-        nbt.putDouble("playerHomeZ",            playerHomeZ);
-        nbt.putInt("calmTicks",                 calmTicks);
-        nbt.putBoolean("verityLost",            verityLost);
-        nbt.putBoolean("askedAboutEastVillage", askedAboutEastVillage);
-        nbt.putBoolean("leftVerity",            leftVerity);
-        nbt.putBoolean("invitedFriendEarly",    invitedFriendEarly);
-        nbt.putBoolean("madeAngry",             madeAngry);
-        nbt.putInt("dreadScore",                dreadScore);
-        nbt.putInt("proximityTicks",            proximityTicks);
-        nbt.putInt("ignoredTicks",              ignoredTicks);
-        nbt.putInt("attachmentScore",           attachmentScore);
-        nbt.putInt("jealousyScore",             jealousyScore);
-        nbt.putLong("lonelinessTicks",          lonelinessTicks);
-        nbt.putBoolean("yandereMode",           yandereMode);
-        nbt.putInt("rejectionCount",            rejectionCount);
-        return nbt;
+        return level.getDataStorage().computeIfAbsent(TYPE);
     }
 
     // ------------------------------------------------------------------ //

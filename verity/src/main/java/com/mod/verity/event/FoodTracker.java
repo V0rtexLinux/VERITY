@@ -40,7 +40,7 @@ public class FoodTracker {
 
         if (stack.has(DataComponents.FOOD)) {
             String key    = stack.getItem().getDescriptionId().toLowerCase();
-            String regKey = BuiltInRegistries.ITEM.getKey(stack.getItem()).location().toString().toLowerCase();
+            String regKey = BuiltInRegistries.ITEM.getKey(stack.getItem()).id().toString().toLowerCase();
 
             boolean isPizzaOrMeat = MEAT_KEYWORDS.stream()
                     .anyMatch(kw -> key.contains(kw) || regKey.contains(kw));

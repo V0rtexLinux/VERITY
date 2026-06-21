@@ -55,8 +55,8 @@ public abstract class WindowStalkingMixin {
         if (stalkCooldown > 0) return;
 
         // Find Verity in the world
-        var verityList = world.getEntitiesByClass(VerityEntity.class,
-                player.getBoundingBox().expand(64), e -> true);
+        var verityList = world.getEntitiesOfClass(VerityEntity.class,
+                player.getBoundingBox().inflate(64), e -> true);
         if (verityList.isEmpty()) return;
         VerityEntity verity = verityList.get(0);
 
@@ -84,7 +84,7 @@ public abstract class WindowStalkingMixin {
 
         // ---- Glass break: player looks at Verity behind glass ----------
         if (playerLooking && dist <= STALK_RANGE && !verity.hasJumped()) {
-            BlockPos glassPos = getGlassBetween(player.getPos(), verity.getPos(), world);
+            BlockPos glassPos = getGlassBetween(player.position(), verity.position(), world);
             if (glassPos != null) {
                 // Break the glass
                 world.destroyBlock(glassPos, false);
@@ -109,7 +109,7 @@ public abstract class WindowStalkingMixin {
      * player at roughly eye level.
      */
     private BlockPos findGlassNearPlayer(Player player, ServerLevel world) {
-        BlockPos origin = player.getBlockPos().up();
+        BlockPos origin = player.blockPosition().above();
         int r = (int) GLASS_SCAN_RANGE;
         for (BlockPos pos : BlockPos.iterate(origin.add(-r, -2, -r), origin.add(r, 2, r))) {
             if (isGlass(world, pos)) {

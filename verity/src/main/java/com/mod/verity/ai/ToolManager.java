@@ -425,7 +425,7 @@ public class ToolManager {
     public static void sendMessage(String message) {
         if (currentServer != null) {
             currentServer.execute(() -> {
-                currentServer.getPlayerList().broadcast(Component.literal(message), false);
+                currentServer.getPlayerList().broadcastSystemMessage(Component.literal(message), false);
             });
         }
     }

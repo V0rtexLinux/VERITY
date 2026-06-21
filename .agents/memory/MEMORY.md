@@ -1,0 +1,1 @@
+- [MC 26.1.2 Fabric migration](mc26-fabric-migration.md) — SavedDataType, HudElementRegistry, ResourceKey.id(), Entity Mojang mappings

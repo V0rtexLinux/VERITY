@@ -3,13 +3,19 @@ package com.mod.verity.voice;
 import com.mod.verity.VerityMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.fabricmc.fabric.api.client.rendering.v1.InGameHudRenderCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 
 /**
  * Renders a small voice-status indicator in the top-left corner of the HUD.
+ *
+ * Migrated from InGameHudRenderCallback (removed in Fabric 26.1) to
+ * HudElementRegistry + VanillaHudElements (new API for Fabric 26.1.2).
  *
  * States:
  *   ● IDLE        — nothing shown
@@ -26,10 +32,14 @@ public class VoiceHudRenderer {
 
     public static void register(VoiceListener voiceListener) {
         listener = voiceListener;
-        InGameHudRenderCallback.EVENT.register(VoiceHudRenderer::render);
+        HudElementRegistry.attachElementBefore(
+            VanillaHudElements.CHAT,
+            ResourceLocation.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
+            VoiceHudRenderer::render
+        );
     }
 
-    private static void render(GuiGraphics context, float tickDelta) {
+    private static void render(GuiGraphics context, DeltaTracker tickDelta) {
         if (listener == null) return;
 
         VoiceListener.VoiceState state = listener.hudState;
@@ -53,7 +63,6 @@ public class VoiceHudRenderer {
                 color = 0xAAAAAA;
             }
             case LISTENING -> {
-                // Pulse between bright green and darker green
                 boolean bright = (pulseTick / 10) % 2 == 0;
                 label = bright ? "§a🎤 Ouvindo..." : "§2🎤 Ouvindo...";
                 color = bright ? 0x55FF55 : 0x22AA22;
@@ -65,23 +74,20 @@ public class VoiceHudRenderer {
             default -> { return; }
         }
 
-        // Draw background pill
         int x = 6;
         int y = 6;
-        int textWidth  = client.font.width(Component.literal(label));
+        int textWidth = client.font.width(Component.literal(label));
         int padX = 5, padY = 3;
 
         context.fill(x - padX, y - padY,
                      x + textWidth + padX, y + client.font.lineHeight + padY,
-                     0x88000000); // semi-transparent black
+                     0x88000000);
 
-        // Draw border
         context.drawBorder(x - padX, y - padY,
                            textWidth + padX * 2,
-                           client.textRenderer.fontHeight + padY * 2,
+                           client.font.lineHeight + padY * 2,
                            state == VoiceListener.VoiceState.LISTENING ? 0xFF55FF55 : 0xFF555555);
 
-        // Draw text
         context.drawString(client.font, Component.literal(label), x, y, color, true);
     }
 }

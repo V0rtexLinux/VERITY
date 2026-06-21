@@ -2,7 +2,7 @@ package com.mod.verity.entity;
 
 import com.mod.verity.VerityMod;
 import com.mod.verity.state.VerityWorldState;
-import net.minecraft.core.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import software.bernie.geckolib.model.GeoEntityModel;
 
