@@ -7,9 +7,9 @@ import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.fabricmc.fabric.api.client.rendering.v1.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Identifier;
 
 /**
  * Renders a small voice-status indicator in the top-left corner of the HUD.
@@ -34,12 +34,12 @@ public class VoiceHudRenderer {
         listener = voiceListener;
         HudElementRegistry.attachElementBefore(
             VanillaHudElements.CHAT,
-            ResourceLocation.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
+            Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
             VoiceHudRenderer::render
         );
     }
 
-    private static void render(GuiGraphics context, DeltaTracker tickDelta) {
+    private static void render(GuiGraphicsExtractor context, DeltaTracker tickDelta) {
         if (listener == null) return;
 
         VoiceListener.VoiceState state = listener.hudState;

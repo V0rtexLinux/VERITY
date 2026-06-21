@@ -3,6 +3,7 @@ package com.mod.verity.state;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -21,7 +22,7 @@ import java.util.UUID;
  */
 public class PlayerSessionData extends SavedData {
 
-    private static final String KEY = "verity_player_sessions";
+    private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "player_sessions");
 
     private static final Codec<UUID> UUID_CODEC =
             Codec.STRING.xmap(UUID::fromString, UUID::toString);

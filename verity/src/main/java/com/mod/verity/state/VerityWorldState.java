@@ -3,6 +3,7 @@ package com.mod.verity.state;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraft.world.level.saveddata.SavedDataType;
 
@@ -14,7 +15,7 @@ import net.minecraft.world.level.saveddata.SavedDataType;
  */
 public class VerityWorldState extends SavedData {
 
-    private static final String KEY = "verity_world_state";
+    private static final Identifier KEY = Identifier.fromNamespaceAndPath("verity", "world_state");
 
     // ------------------------------------------------------------------ //
     //  Nested record to hold yandere/extra fields (RecordCodecBuilder     //
