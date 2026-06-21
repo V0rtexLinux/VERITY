@@ -21,10 +21,10 @@ repositories {
 
 dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.21.5:${project.geckolib_version}"
+    implementation "software.bernie.geckolib:geckolib-fabric-1.21.5:${project.geckolib_version}"
 
     if (file('libs').exists()) {
         implementation fileTree(dir: 'libs', include: ['*.jar'])
