@@ -4,6 +4,7 @@ import com.mod.verity.VerityMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -45,6 +46,7 @@ public class VoicePacket {
     //  Server-side registration                                            //
     // ------------------------------------------------------------------ //
     public static void registerServer() {
+        PayloadTypeRegistry.serverboundPlay().register(VoiceQueryPayload.TYPE, VoiceQueryPayload.CODEC);
         ServerPlayNetworking.registerGlobalReceiver(VoiceQueryPayload.TYPE,
                 (payload, context) -> {
                     String query = payload.query().trim();
