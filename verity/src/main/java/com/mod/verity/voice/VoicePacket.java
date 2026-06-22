@@ -6,7 +6,7 @@ import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
@@ -29,7 +29,7 @@ public class VoicePacket {
 
         public static final CustomPacketPayload.Type<VoiceQueryPayload> TYPE =
                 new CustomPacketPayload.Type<>(
-                        ResourceLocation.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_query"));
+                        Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_query"));
 
         public static final StreamCodec<FriendlyByteBuf, VoiceQueryPayload> CODEC =
                 StreamCodec.of(

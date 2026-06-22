@@ -9,7 +9,7 @@ import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 /**
  * Renders a small voice-status indicator in the top-left corner of the HUD.
@@ -34,7 +34,7 @@ public class VoiceHudRenderer {
         listener = voiceListener;
         HudElementRegistry.attachElementBefore(
             VanillaHudElements.CHAT,
-            ResourceLocation.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
+            Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
             VoiceHudRenderer::render
         );
     }

@@ -24,12 +24,12 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.damagesource.DamageSource;
-import software.bernie.geckolib.animatable.GeoAnimatable;
-import software.bernie.geckolib.animatable.AnimatableManager;
-import software.bernie.geckolib.animatable.instance.AnimatableInstanceCache;
-import software.bernie.geckolib.animation.*;
-import software.bernie.geckolib.animation.AnimationState;
-import software.bernie.geckolib.util.GeckoLibUtil;
+import com.geckolib.animatable.GeoAnimatable;
+import com.geckolib.animatable.manager.AnimatableManager;
+import com.geckolib.animatable.instance.AnimatableInstanceCache;
+import com.geckolib.animation.*;
+import com.geckolib.animation.object.PlayState;
+import com.geckolib.util.GeckoLibUtil;
 
 import java.util.UUID;
 
@@ -154,7 +154,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
         }
         if (days == 4 && stage == 2) {
             state.setCurrentStage(3);
-            ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
+            world.getWeatherData().setRaining(true);
             broadcastHorror(world, "§6[Verity]§r §7I know you ate pizza yesterday.");
         }
         if (days == 6 && stage == 3) {
@@ -163,7 +163,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
         }
         if (days == 8 && stage == 4) {
             state.setCurrentStage(5);
-            ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
+            world.getWeatherData().setRaining(true);
             broadcastHorror(world, "§4[Verity]§r §c...");
         }
     }
@@ -213,7 +213,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage3(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(true);
-        ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
+        world.getWeatherData().setRaining(true);
 
         alarmCooldown--;
         if (alarmCooldown <= 0) {
@@ -234,7 +234,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage4(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(true);
-        ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
+        world.getWeatherData().setRaining(true);
 
         if (world.players().size() > 1 && state.getDaysElapsed() < 4) {
             state.triggerInvitedFriendEarly();
@@ -257,7 +257,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     private void tickStage5(ServerLevel world, VerityWorldState state) {
         this.setNoGravity(false);
-        ((net.minecraft.world.level.storage.ServerLevelData) world.getLevelData()).setRaining(true);
+        world.getWeatherData().setRaining(true);
 
         if (this.getHealth() < 2000.0f) this.setHealth(2000.0f);
 
@@ -333,7 +333,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     //  NBT                                                                 //
     // ------------------------------------------------------------------ //
     @Override
-    public void readAdditionalSaveData(net.minecraft.util.valueinput.ValueInput input) {
+    public void readAdditionalSaveData(net.minecraft.world.level.storage.ValueInput input) {
         super.readAdditionalSaveData(input);
         input.read("TargetPlayerUUID", net.minecraft.core.UUIDUtil.CODEC)
              .ifPresent(uuid -> targetPlayerUUID = uuid);
@@ -341,7 +341,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     }
 
     @Override
-    public void addAdditionalSaveData(net.minecraft.util.valueoutput.ValueOutput output) {
+    public void addAdditionalSaveData(net.minecraft.world.level.storage.ValueOutput output) {
         super.addAdditionalSaveData(output);
         if (targetPlayerUUID != null) {
             output.store("TargetPlayerUUID", net.minecraft.core.UUIDUtil.CODEC, targetPlayerUUID);

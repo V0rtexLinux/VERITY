@@ -146,7 +146,7 @@ public class VerityAssistant {
                             result.getX(), result.getY(), result.getZ(),
                             dist, dx, dy, dz));
                     if (stage >= 3) {
-                        world.playSound(null, result, SoundEvents.NOTE_BLOCK_PLING,
+                        world.playSound(null, result, SoundEvents.NOTE_BLOCK_PLING.value(),
                                 SoundSource.BLOCKS, 1f, 2f);
                     }
                 }
@@ -235,7 +235,7 @@ public class VerityAssistant {
                 holderSet = tagSet.get();
             } else {
                 ResourceKey<Structure> rk = ResourceKey.create(Registries.STRUCTURE,
-                        net.minecraft.resources.ResourceLocation.tryParse("minecraft:" + entry.mcId()));
+                        net.minecraft.resources.Identifier.tryParse("minecraft:" + entry.mcId()));
                 Optional<Holder.Reference<Structure>> holder = reg.get(rk);
                 if (holder.isEmpty()) {
                     server.execute(() -> sendPrivate(player,
@@ -353,7 +353,7 @@ public class VerityAssistant {
             server.execute(() -> {
                 sendPrivate(player, String.format("%s §f%d blocos de §f%s §fcolocados!",
                         prefix(stage), positions.size(), blockName));
-                world.playSound(null, origin, SoundEvents.NOTE_BLOCK_BELL,
+                world.playSound(null, origin, SoundEvents.NOTE_BLOCK_BELL.value(),
                         SoundSource.BLOCKS, 0.8f, 1.2f);
             });
         });
@@ -531,7 +531,7 @@ public class VerityAssistant {
                                      MinecraftServer server, int stage) {
         ServerLevel world = (ServerLevel) player.level();
         var villagers = world.getEntitiesOfClass(
-                net.minecraft.world.entity.npc.Villager.class, player.getBoundingBox().inflate(6), e -> true);
+                net.minecraft.world.entity.npc.villager.Villager.class, player.getBoundingBox().inflate(6), e -> true);
 
         if (villagers.isEmpty()) {
             sendPrivate(player, prefix(stage) + " §7Nenhum aldeão perto para avaliar.");
@@ -624,8 +624,8 @@ public class VerityAssistant {
 
     private static Block resolveMaterial(@Nullable String material, ServerPlayer player) {
         if (material == null) {
-            Block held = BuiltInRegistries.BLOCK.get(
-                    ResourceLocation.tryParse("minecraft:" +
+            Block held = BuiltInRegistries.BLOCK.getValue(
+                    net.minecraft.resources.Identifier.tryParse("minecraft:" +
                             player.getMainHandItem().getItem()
                                     .getDescriptionId()
                                     .replace("item.minecraft.", "")

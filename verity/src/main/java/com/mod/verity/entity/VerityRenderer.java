@@ -1,7 +1,7 @@
 package com.mod.verity.entity;
 
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import software.bernie.geckolib.renderer.GeoEntityRenderer;
+import com.geckolib.renderer.GeoEntityRenderer;
 
 /**
  * Client-side renderer for VerityEntity using GeckoLib's GeoEntityRenderer.

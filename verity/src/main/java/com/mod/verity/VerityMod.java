@@ -15,7 +15,7 @@ import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -39,9 +39,9 @@ public class VerityMod implements ModInitializer {
     //  Entity Type                                                         //
     // ------------------------------------------------------------------ //
     @SuppressWarnings("unchecked")
-    private static <T> ResourceKey<EntityType<T>> entityKey(String path) {
+    private static <T extends net.minecraft.world.entity.Entity> ResourceKey<EntityType<T>> entityKey(String path) {
         return (ResourceKey<EntityType<T>>) (ResourceKey<?>) ResourceKey.create(
-                Registries.ENTITY_TYPE, ResourceLocation.fromNamespaceAndPath(MOD_ID, path));
+                Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, path));
     }
 
     public static final EntityType<VerityEntity> VERITY = Registry.register(
@@ -89,12 +89,12 @@ public class VerityMod implements ModInitializer {
         LOGGER.info("[Verity] Initializing...");
 
         // --- Blocks ---
-        Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX);
-        Registry.register(BuiltInRegistries.ITEM,  ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX_ITEM);
+        Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX);
+        Registry.register(BuiltInRegistries.ITEM,  Identifier.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX_ITEM);
 
         // --- Items ---
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "verity_orb"),       VERITY_ORB_ITEM);
-        Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(MOD_ID, "twixxels_journal"), TWIXXELS_JOURNAL);
+        Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "verity_orb"),       VERITY_ORB_ITEM);
+        Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "twixxels_journal"), TWIXXELS_JOURNAL);
 
         // --- Entity attributes ---
         FabricDefaultAttributeRegistry.register(VERITY, VerityEntity.createAttributes());

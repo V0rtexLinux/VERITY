@@ -105,7 +105,7 @@ public class PromptSystem {
             player.blockPosition().getZ()));
 
         ResourceKey<net.minecraft.world.level.Level> dim = player.level().dimension();
-        String dimension = dim.location().getPath();
+        String dimension = dim.identifier().getPath();
         context.append(String.format("- Dimension: %s\n", dimension));
         context.append(String.format("- Health: %.1f/%.1f\n", player.getHealth(), player.getMaxHealth()));
         context.append(String.format("- Hunger: %d/20\n", player.getFoodData().getFoodLevel()));

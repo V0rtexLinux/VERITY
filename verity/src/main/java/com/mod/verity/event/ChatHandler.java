@@ -100,7 +100,7 @@ public class ChatHandler {
                                          ServerLevel world, MinecraftServer server) {
         notifyEntity(world);
         world.playSound(null, player.blockPosition(),
-                SoundEvents.NOTE_BLOCK_CHIME,
+                SoundEvents.NOTE_BLOCK_CHIME.value(),
                 SoundSource.PLAYERS, 0.3f, 2.0f);
         CompletableFuture.runAsync(() -> handleQuery(query, player, world, server));
     }
