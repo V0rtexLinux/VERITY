@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class OllamaManager {
     
     private static final String OLLAMA_VERSION = "0.5.7";
-    private static final String DEFAULT_MODEL = "gemma2:2b"; // Using gemma2:2b which is already installed and lightweight
+    private static String DEFAULT_MODEL = "gemma2:2b";
     private static final String OLLAMA_API_URL = "http://localhost:11434";
     
     // Alternative models directory for users with special characters in username
@@ -698,9 +698,22 @@ public class OllamaManager {
      * Call this before starting the server if you want to use a different model.
      */
     public static void setDefaultModel(String modelName) {
-        // This would need to be stored in a config file for persistence
-        // For now, it's just a conceptual method
-        VerityMod.LOGGER.info("[VerityAI] Model change requested to: " + modelName + " (requires code change to persist)");
+        if (modelName != null && !modelName.isBlank()) {
+            DEFAULT_MODEL = modelName;
+            VerityMod.LOGGER.info("[VerityAI] Default model changed to: " + modelName);
+        }
+    }
+
+    /**
+     * Apply model recommendation from DependencyAutoSetup.
+     * Called after setup completes so the best model for this machine is used.
+     */
+    public static void applyRecommendedModel() {
+        String recommended = System.getProperty("verity.recommended_model", "");
+        if (!recommended.isBlank() && !recommended.equals(DEFAULT_MODEL)) {
+            VerityMod.LOGGER.info("[VerityAI] Applying recommended model from setup: " + recommended);
+            DEFAULT_MODEL = recommended;
+        }
     }
     
     /**

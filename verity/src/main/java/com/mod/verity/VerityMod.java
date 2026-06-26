@@ -1,5 +1,6 @@
 package com.mod.verity;
 
+import com.mod.verity.ai.DependencyAutoSetup;
 import com.mod.verity.ai.VerityAI;
 import com.mod.verity.block.VerityBoxBlock;
 import com.mod.verity.entity.VerityEntity;
@@ -108,6 +109,15 @@ public class VerityMod implements ModInitializer {
         // --- Player join / death hooks ---
         registerPlayerJoinEvent();
         registerDeathEvent();
+
+        // --- Dependency Auto-Setup (runs async, configures Ollama & checks mods) ---
+        DependencyAutoSetup.runFullSetup().thenAccept(result -> {
+            LOGGER.info("[Verity] Dependency setup complete. Model: " + result.recommendedModel);
+            String missing = result.getMissingModsWarning();
+            if (!missing.isBlank()) {
+                LOGGER.warn("[Verity] " + missing);
+            }
+        });
 
         // --- AI System ---
         VerityAI.initialize().thenAccept(success -> {
