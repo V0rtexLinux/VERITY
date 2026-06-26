@@ -387,7 +387,10 @@ Swear naturally if the context calls for it (stage 4-5 Verity doesn't filter her
         context.append(String.format("- Is raining: %s  Thunder: %s\n",
             player.level().isRaining(),
             player.level().isThundering()));
-        context.append(String.format("- Game mode: %s\n", player.gameMode.getGameModeForPlayer().getName()));
+        try {
+            context.append(String.format("- Game mode: %s\n",
+                player.gameMode.getGameModeForPlayer().getSerializedName()));
+        } catch (Exception ignored) { context.append("- Game mode: survival\n"); }
 
         ItemStack mainHand = player.getMainHandItem();
         if (!mainHand.isEmpty()) {
