@@ -122,6 +122,6 @@ public class VerityVoiceManager {
      */
     public static boolean isVoiceAvailable() {
         // Check if key sound files are registered
-        return BuiltInRegistries.SOUND_EVENT.get(ResourceLocation.fromNamespaceAndPath("verity", "hello")) != null;
+        return BuiltInRegistries.SOUND_EVENT.getValue(Identifier.fromNamespaceAndPath("verity", "hello")) != null;
     }
 }

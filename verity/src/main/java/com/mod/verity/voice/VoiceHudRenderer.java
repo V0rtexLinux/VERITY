@@ -3,11 +3,12 @@ package com.mod.verity.voice;
 import com.mod.verity.VerityMod;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElement;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
 import net.minecraft.client.DeltaTracker;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 
@@ -25,7 +26,7 @@ import net.minecraft.resources.Identifier;
  *   ● PROCESSING  — §e🎤 Processando...               (yellow)
  */
 @Environment(EnvType.CLIENT)
-public class VoiceHudRenderer {
+public class VoiceHudRenderer implements HudElement {
 
     private static VoiceListener listener;
     private static long pulseTick = 0;
@@ -35,11 +36,12 @@ public class VoiceHudRenderer {
         HudElementRegistry.attachElementBefore(
             VanillaHudElements.CHAT,
             Identifier.fromNamespaceAndPath(VerityMod.MOD_ID, "voice_hud"),
-            VoiceHudRenderer::render
+            new VoiceHudRenderer()
         );
     }
 
-    private static void render(GuiGraphics context, DeltaTracker tickDelta) {
+    @Override
+    public void extractRenderState(GuiGraphicsExtractor context, DeltaTracker tickDelta) {
         if (listener == null) return;
 
         VoiceListener.VoiceState state = listener.hudState;
@@ -83,11 +85,10 @@ public class VoiceHudRenderer {
                      x + textWidth + padX, y + client.font.lineHeight + padY,
                      0x88000000);
 
-        context.drawBorder(x - padX, y - padY,
-                           textWidth + padX * 2,
-                           client.font.lineHeight + padY * 2,
-                           state == VoiceListener.VoiceState.LISTENING ? 0xFF55FF55 : 0xFF555555);
+        context.outline(x - padX, y - padY,
+                        x + textWidth + padX, y + client.font.lineHeight + padY,
+                        state == VoiceListener.VoiceState.LISTENING ? 0xFF55FF55 : 0xFF555555);
 
-        context.drawString(client.font, Component.literal(label), x, y, color, true);
+        context.text(client.font, Component.literal(label), x, y, color);
     }
 }

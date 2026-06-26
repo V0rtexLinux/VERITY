@@ -38,20 +38,18 @@ public class VerityMod implements ModInitializer {
     // ------------------------------------------------------------------ //
     //  Entity Type                                                         //
     // ------------------------------------------------------------------ //
-    @SuppressWarnings("unchecked")
-    private static <T extends net.minecraft.world.entity.Entity> ResourceKey<EntityType<T>> entityKey(String path) {
-        return (ResourceKey<EntityType<T>>) (ResourceKey<?>) ResourceKey.create(
-                Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, path));
+    private static ResourceKey<EntityType<?>> entityKey(String path) {
+        return ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, path));
     }
 
     public static final EntityType<VerityEntity> VERITY = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
-            VerityMod.<VerityEntity>entityKey("verity"),
+            VerityMod.entityKey("verity"),
             EntityType.Builder.<VerityEntity>of(VerityEntity::new, MobCategory.MONSTER)
                     .sized(0.6f, 0.6f)
                     .clientTrackingRange(16)
                     .updateInterval(1)
-                    .build(VerityMod.<VerityEntity>entityKey("verity"))
+                    .build(VerityMod.entityKey("verity"))
     );
 
     // ------------------------------------------------------------------ //

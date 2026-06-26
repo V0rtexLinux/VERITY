@@ -337,7 +337,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
         super.readAdditionalSaveData(input);
         input.read("TargetPlayerUUID", net.minecraft.core.UUIDUtil.CODEC)
              .ifPresent(uuid -> targetPlayerUUID = uuid);
-        hasJumped = input.getBoolean("HasJumped");
+        hasJumped = input.getBooleanOr("HasJumped", false);
     }
 
     @Override
@@ -424,7 +424,7 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     // ------------------------------------------------------------------ //
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
-        controllers.add(new AnimationController<>(this, "controller", 5, state -> {
+        controllers.add(new AnimationController<>("controller", 5, state -> {
             if (!this.level().isClientSide()) {
                 VerityWorldState ws = VerityWorldState.getOrCreate(
                         (ServerLevel) this.level());

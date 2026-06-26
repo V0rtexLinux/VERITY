@@ -539,9 +539,9 @@ public class VerityAssistant {
         }
 
         var v = villagers.get(0);
-        String profession = v.getVillagerData().getProfession()
+        String profession = v.getVillagerData().profession()
                 .toString().replace("minecraft:", "").replace("_", " ");
-        String level = switch (v.getVillagerData().getLevel()) {
+        String level = switch (v.getVillagerData().level()) {
             case 1 -> "Novice"; case 2 -> "Apprentice"; case 3 -> "Journeyman";
             case 4 -> "Expert"; case 5 -> "Master"; default -> "Unknown";
         };

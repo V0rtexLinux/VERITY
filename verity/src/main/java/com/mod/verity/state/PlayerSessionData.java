@@ -40,10 +40,10 @@ public class PlayerSessionData extends SavedData {
             UUID_LONG_MAP.optionalFieldOf("lastLoginTime",     Map.of()).forGetter(d -> d.lastLoginTime)
     ).apply(i, PlayerSessionData::new));
 
-    public static final SavedDataType<PlayerSessionData> TYPE = new SavedDataType<>(
+    public static final SavedDataType<PlayerSessionData> TYPE = new SavedDataType<PlayerSessionData>(
             KEY,
-            ctx -> new PlayerSessionData(Map.of(), Map.of(), Map.of(), Map.of()),
-            ctx -> CODEC,
+            () -> new PlayerSessionData(Map.of(), Map.of(), Map.of(), Map.of()),
+            CODEC,
             null
     );
 

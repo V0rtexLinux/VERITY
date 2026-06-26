@@ -212,7 +212,7 @@ public class VoiceListener {
         if (query.isBlank()) return;
         hudState = VoiceState.PROCESSING;
         VerityMod.LOGGER.info("[Verity Voice] '{}'", query);
-        MinecraftClient.getInstance().execute(() -> {
+        Minecraft.getInstance().execute(() -> {
             onQuery.accept(query);
             hudState = VoiceState.WAITING;
         });

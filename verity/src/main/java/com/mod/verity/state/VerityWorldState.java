@@ -81,10 +81,10 @@ public class VerityWorldState extends SavedData {
         return s;
     }));
 
-    public static final SavedDataType<VerityWorldState> TYPE = new SavedDataType<>(
+    public static final SavedDataType<VerityWorldState> TYPE = new SavedDataType<VerityWorldState>(
             KEY,
-            ctx -> new VerityWorldState(),
-            ctx -> CODEC,
+            VerityWorldState::new,
+            CODEC,
             null
     );
 
