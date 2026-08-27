@@ -1,0 +1,79 @@
+~/workspace$ git fetch --prune origin
+git switch main
+git branch --set-upstream-to=origin/main main
+git status -sb
+From https://github.com/V0rtexLinux/VERITY
+ - [deleted]         (none)     -> origin/main
+   refs/remotes/origin/HEAD has become dangling after refs/remotes/origin/main was deleted
+Already on 'main'
+Your branch is based on 'origin/main', but the upstream is gone.
+  (use "git branch --unset-upstream" to fixup)
+fatal: the requested upstream branch 'origin/main' does not exist
+hint:
+hint: If you are planning on basing your work on an upstream
+hint: branch that already exists at the remote, you may need to
+hint: run "git fetch" to retrieve it.
+hint:
+hint: If you are planning to push out a new local branch that
+hint: will track its remote counterpart, you may want to use
+hint: "git push -u" to set the upstream config as you push.
+hint: Disable this message with "git config set advice.setUpstreamFailure false"
+## main...origin/main [gone]
+~/workspace$ git push -u origin main
+Enumerating objects: 360, done.
+Counting objects: 100% (360/360), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (266/266), done.
+Writing objects: 100% (360/360), 36.21 MiB | 36.25 MiB/s, done.
+Total 360 (delta 55), reused 266 (delta 18), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (55/55), done.
+remote: fatal: did not receive expected object 43b53339fb04a282bc3d8bcbb1344de3e9610af4
+error: remote unpack failed: index-pack failed
+To https://github.com/V0rtexLinux/VERITY
+ ! [remote rejected] main -> main (failed)
+error: failed to push some refs to 'https://github.com/V0rtexLinux/VERITY'
+~/workspace$ git remote set-head origin -d
+git push --no-thin -u origin main
+Enumerating objects: 360, done.
+Counting objects: 100% (360/360), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (266/266), done.
+Writing objects: 100% (360/360), 36.21 MiB | 7.09 MiB/s, done.
+Total 360 (delta 55), reused 266 (delta 18), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (55/55), done.
+remote: fatal: did not receive expected object 43b53339fb04a282bc3d8bcbb1344de3e9610af4
+error: remote unpack failed: index-pack failed
+To https://github.com/V0rtexLinux/VERITY
+ ! [remote rejected] main -> main (failed)
+error: failed to push some refs to 'https://github.com/V0rtexLinux/VERITY'
+~/workspace$ git fsck --full
+Checking ref database: 100% (1/1), done.
+Checking object directories: 100% (256/256), done.
+Checking objects: 100% (282/282), done.
+~/workspace$ git push --no-thin origin main
+Enumerating objects: 360, done.
+Counting objects: 100% (360/360), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (266/266), done.
+Writing objects: 100% (360/360), 36.21 MiB | 45.00 MiB/s, done.
+Total 360 (delta 55), reused 266 (delta 18), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (55/55), done.
+remote: fatal: did not receive expected object 43b53339fb04a282bc3d8bcbb1344de3e9610af4
+error: remote unpack failed: index-pack failed
+To https://github.com/V0rtexLinux/VERITY
+ ! [remote rejected] main -> main (failed)
+error: failed to push some refs to 'https://github.com/V0rtexLinux/VERITY'
+~/workspace$ git push --no-thin -u origin main
+Enumerating objects: 360, done.
+Counting objects: 100% (360/360), done.
+Delta compression using up to 4 threads
+Compressing objects: 100% (266/266), done.
+Writing objects: 100% (360/360), 36.21 MiB | 40.70 MiB/s, done.
+Total 360 (delta 55), reused 266 (delta 18), pack-reused 0 (from 0)
+remote: Resolving deltas: 100% (55/55), done.
+remote: fatal: did not receive expected object 43b53339fb04a282bc3d8bcbb1344de3e9610af4
+error: remote unpack failed: index-pack failed
+To https://github.com/V0rtexLinux/VERITY
+ ! [remote rejected] main -> main (failed)
+error: failed to push some refs to 'https://github.com/V0rtexLinux/VERITY'
+~/workspace$ 
