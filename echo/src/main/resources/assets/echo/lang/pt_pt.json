@@ -1,0 +1,26 @@
+{
+  "entity.echo.echo_orb": "Orbe ECHO",
+  "item.echo.echo_core":  "Núcleo ECHO",
+
+  "echo.name": "ECHO",
+  "echo.tagline": "O teu assistente local, sem internet.",
+
+  "echo.chat.greeting":       "Estou aqui. Diz \"hey echo\" sempre que precisares.",
+  "echo.chat.thinking":       "a pensar...",
+  "echo.chat.no_backend":     "O meu modelo local ainda não está a correr.",
+  "echo.chat.help":           "Pergunta-me o que quiseres, ou diz \"echo help\".",
+  "echo.chat.death_recorded": "Guardei onde caíste.",
+
+  "echo.tuner.applied":  "Afinei as tuas definições.",
+  "echo.tuner.preview":  "Definições que eu usaria.",
+  "echo.tuner.disabled": "O afinador de definições está desligado no echo.json.",
+
+  "echo.voice.loading":    "ECHO — a iniciar a voz...",
+  "echo.voice.waiting":    "ECHO — diz \"hey echo\"",
+  "echo.voice.listening":  "ECHO — a ouvir",
+  "echo.voice.processing": "ECHO — a pensar",
+
+  "echo.item.core.hint":    "Clique direito para chamar ou dispensar a orbe.",
+  "echo.item.core.backend": "Motor",
+  "echo.item.core.model":   "Modelo"
+}

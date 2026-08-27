@@ -1,0 +1,25 @@
+{
+  "schemaVersion": 1,
+  "id": "echo",
+  "version": "${version}",
+  "name": "ECHO",
+  "description": "ECHO is a local, offline AI assistant that lives in your world. It answers in chat, actually acts on the world through real tool calls, and tunes your Minecraft settings to match your hardware, your mods and the server you are on. No account, no API key, nothing leaves your machine.",
+  "authors": ["v0rtexlinux"],
+  "contact": {
+    "sources": "https://github.com/v0rtexlinux/verity"
+  },
+  "license": "MIT",
+  "icon": "assets/echo/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": ["com.mod.echo.EchoMod"],
+    "client": ["com.mod.echo.EchoModClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.18.4",
+    "fabric-api": "*",
+    "minecraft": ">=26.1.2",
+    "java": ">=21",
+    "geckolib": "*"
+  }
+}

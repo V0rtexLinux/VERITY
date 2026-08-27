@@ -1,10 +1,11 @@
-name: Build Minecraft Mod
+name: Build ECHO
 
 on:
   push:
     branches:
       - main
       - master
+      - 'claude/**'
   pull_request:
   workflow_dispatch:
 
@@ -36,22 +37,18 @@ jobs:
           java -version
           javac -version
 
-      - name: Stop existing Gradle daemons
-        working-directory: verity
-        run: .\gradlew.bat --stop
-
       - name: Build mod
-        working-directory: verity
+        working-directory: echo
         run: .\gradlew.bat clean build --no-daemon --stacktrace
 
       - name: Check generated JAR
-        working-directory: verity
+        working-directory: echo
         run: |
           $jars = Get-ChildItem "build/libs/*.jar" |
             Where-Object { $_.Name -notlike "*-sources.jar" }
 
           if ($jars.Count -eq 0) {
-            throw "Nenhum JAR do mod foi encontrado em build/libs."
+            throw "No mod JAR was produced in build/libs."
           }
 
           $jars | Format-Table Name, Length
@@ -59,9 +56,9 @@ jobs:
       - name: Upload mod JAR
         uses: actions/upload-artifact@v4
         with:
-          name: verity-mod-${{ github.sha }}
+          name: echo-mod-${{ github.sha }}
           path: |
-            verity/build/libs/*.jar
-            !verity/build/libs/*-sources.jar
+            echo/build/libs/*.jar
+            !echo/build/libs/*-sources.jar
           if-no-files-found: error
           retention-days: 30
