@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class OllamaManager {
     
     private static final String OLLAMA_VERSION = "0.5.7";
-    private static String DEFAULT_MODEL = "gemma2:2b";
+    private static String DEFAULT_MODEL = "llama3:2b";
     private static final String OLLAMA_API_URL = "http://localhost:11434";
     
     // Alternative models directory for users with special characters in username
@@ -645,9 +645,9 @@ public class OllamaManager {
                     
                     // Give specific error messages for common issues
                     if (response.statusCode() == 500) {
-                        return "Error: Ollama model not loaded or corrupted. Please run: ollama pull gemma2:2b";
+                        return "Error: Ollama model not loaded or corrupted. Please run: ollama pull llama3:2b";
                     } else if (response.statusCode() == 404) {
-                        return "Error: Model not found. Please run: ollama pull gemma2:2b";
+                        return "Error: Model not found. Please run: ollama pull llama3:2b";
                     }
                     
                     return "Error: Ollama request failed with status " + response.statusCode();

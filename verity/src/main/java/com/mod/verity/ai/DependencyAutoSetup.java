@@ -20,7 +20,7 @@ import java.util.concurrent.CompletableFuture;
  * On game initialization this class:
  *  1. Verifies required Fabric mods are present (GeckoLib, Fabric API)
  *  2. Auto-installs or configures Ollama for the detected OS
- *  3. Selects the best available AI model based on system RAM
+ *  3. Selects a tool-capable AI model and a low-memory fallback
  *  4. Writes an Ollama Modelfile with Verity-specific parameters
  *  5. Configures environment variables and paths for special characters
  *
@@ -200,19 +200,13 @@ public class DependencyAutoSetup {
     private static void selectOptimalModel(SetupResult result) {
         int ram = result.systemRamGb;
 
-        if (ram >= 16) {
-            result.recommendedModel = "gemma2:9b";
-            result.fallbackModel    = "gemma2:2b";
-            result.modelReason      = "16GB+ RAM — using 9B model for better Verity behavior";
-        } else if (ram >= 8) {
-            result.recommendedModel = "gemma2:2b";
-            result.fallbackModel    = "tinyllama";
-            result.modelReason      = "8-16GB RAM — using 2B model (balanced performance)";
-        } else {
-            result.recommendedModel = "tinyllama";
-            result.fallbackModel    = "tinyllama";
-            result.modelReason      = "Low RAM — using TinyLlama for minimal footprint";
-        }
+        // Keep the tool-capable model consistent across machines.  The model
+        // emits the [TOOL:name:{json}] tags consumed by VerityAI.
+        result.recommendedModel = "llama3:2b";
+        result.fallbackModel    = ram >= 8 ? "llama3:2b" : "tinyllama";
+        result.modelReason      = ram >= 8
+                ? "Tool-capable 2B model selected for balanced performance"
+                : "Low RAM — using llama3:2b with TinyLlama as fallback";
 
         VerityMod.LOGGER.info("[VeritySetup] Model selected: " + result.recommendedModel + " (" + result.modelReason + ")");
 
@@ -310,7 +304,7 @@ public class DependencyAutoSetup {
         public boolean fabricApiPresent  = false;
         public boolean ollamaConfigured  = false;
         public String  ollamaModelsDir   = "";
-        public String  recommendedModel  = "gemma2:2b";
+        public String  recommendedModel  = "llama3:2b";
         public String  fallbackModel     = "tinyllama";
         public String  modelReason       = "";
         public String  modelfilePath     = "";
