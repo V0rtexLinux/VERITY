@@ -50,7 +50,7 @@ public final class EchoCoreHandler {
     public static boolean isEchoCore(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data != null && data.copyTag().getBoolean(TAG_ID);
+        return data != null && data.copyTag().getBoolean(TAG_ID).orElse(false);
     }
 
     private static boolean echoActive = false;
