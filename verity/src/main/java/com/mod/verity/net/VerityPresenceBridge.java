@@ -72,7 +72,7 @@ public final class VerityPresenceBridge {
 
     private static void handlePayload(String payload, com.mojang.authlib.GameProfile sender) {
         Minecraft mc = Minecraft.getInstance();
-        if (sender == null || mc.player == null || sender.getId().equals(mc.player.getUUID())) return;
+        if (sender == null || mc.player == null || sender.id().equals(mc.player.getUUID())) return;
 
         String[] parts = payload.split("\\|", 3);
         if (parts.length < 1) return;
@@ -80,18 +80,18 @@ public final class VerityPresenceBridge {
 
         switch (type) {
             case TAG_PING -> {
-                ModPlayerRegistry.markSeen(sender.getId(), sender.getName(), tickCounter);
+                ModPlayerRegistry.markSeen(sender.id(), sender.name(), tickCounter);
                 sendRaw(mc, TAG_PONG, "");
             }
-            case TAG_PONG -> ModPlayerRegistry.markSeen(sender.getId(), sender.getName(), tickCounter);
+            case TAG_PONG -> ModPlayerRegistry.markSeen(sender.id(), sender.name(), tickCounter);
             case TAG_TALK -> {
-                ModPlayerRegistry.markSeen(sender.getId(), sender.getName(), tickCounter);
-                if (parts.length >= 2) showAssistantLine(mc, sender.getName(), parts[1]);
-                ModPlayerRegistry.adjustAssistantFriendship(sender.getId(), 3);
+                ModPlayerRegistry.markSeen(sender.id(), sender.name(), tickCounter);
+                if (parts.length >= 2) showAssistantLine(mc, sender.name(), parts[1]);
+                ModPlayerRegistry.adjustAssistantFriendship(sender.id(), 3);
             }
             case TAG_FRND -> {
-                ModPlayerRegistry.markSeen(sender.getId(), sender.getName(), tickCounter);
-                ModPlayerRegistry.adjustPlayerFriendship(sender.getId(), 2);
+                ModPlayerRegistry.markSeen(sender.id(), sender.name(), tickCounter);
+                ModPlayerRegistry.adjustPlayerFriendship(sender.id(), 2);
             }
             default -> { /* not ours */ }
         }
@@ -118,7 +118,7 @@ public final class VerityPresenceBridge {
             lastTalkTick.put(kp.uuid, tickCounter);
             String line = pickAssistantLine(kp);
             sendRaw(mc, TAG_TALK, line);
-            showAssistantLine(mc, self.getGameProfile().getName(), line);
+            showAssistantLine(mc, self.getGameProfile().name(), line);
             ModPlayerRegistry.adjustAssistantFriendship(kp.uuid, 3);
         }
     }

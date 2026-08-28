@@ -9,6 +9,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.level.Level;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -374,7 +375,10 @@ Swear naturally if the context calls for it (stage 4-5 Verity doesn't filter her
             player.blockPosition().getZ()));
 
         ResourceKey<net.minecraft.world.level.Level> dim = player.level().dimension();
-        String dimension = dim.location().getPath();
+        String dimension = dim.equals(Level.OVERWORLD) ? "overworld"
+            : dim.equals(Level.NETHER) ? "the_nether"
+            : dim.equals(Level.END) ? "the_end"
+            : "custom";
         context.append(String.format("- Dimension: %s\n", dimension));
         context.append(String.format("- Health: %.1f/%.1f\n", player.getHealth(), player.getMaxHealth()));
         context.append(String.format("- Hunger: %d/20  Saturation: %.1f\n",
@@ -382,8 +386,8 @@ Swear naturally if the context calls for it (stage 4-5 Verity doesn't filter her
         context.append(String.format("- XP Level: %d  (%.0f%%)\n", player.experienceLevel,
             player.experienceProgress * 100));
         context.append(String.format("- World time: %d ticks (%s)\n",
-            player.level().getDayTime() % 24000,
-            player.level().getDayTime() % 24000 < 13000 ? "Day" : "Night"));
+            player.level().getGameTime() % 24000,
+            player.level().getGameTime() % 24000 < 13000 ? "Day" : "Night"));
         context.append(String.format("- Is raining: %s  Thunder: %s\n",
             player.level().isRaining(),
             player.level().isThundering()));

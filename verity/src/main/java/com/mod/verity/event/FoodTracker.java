@@ -17,7 +17,7 @@ import java.util.Set;
  * Tracks food consumption so Verity can remember what the player ate.
  *
  * Migrated to Mojang mappings (MC 26.1.2):
- *   PlayerEntity → Player, World → Level, TypedActionResult → InteractionResultHolder,
+ *   PlayerEntity → Player, World → Level, TypedActionResult → InteractionResult,
  *   Hand → InteractionHand, FoodComponent → DataComponents.FOOD.
  */
 public class FoodTracker {

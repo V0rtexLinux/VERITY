@@ -206,6 +206,12 @@ public final class VerityFriendshipManager {
         return uuid.toString().substring(0, 8);
     }
 
+    /** Called when the local player's Echo Core summons an Echo, so nearby modded players find out right away. */
+    public static void notifyLocalEchoSummoned() {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) broadcastHandshake(mc);
+    }
+
     // ------------------------------------------------------------------ //
     //  Accessors                                                           //
     // ------------------------------------------------------------------ //
