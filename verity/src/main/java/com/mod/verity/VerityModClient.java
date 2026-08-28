@@ -3,6 +3,7 @@ package com.mod.verity;
 import com.mod.verity.entity.VerityModel;
 import com.mod.verity.entity.VerityRenderer;
 import com.mod.verity.event.ClientChatInterceptor;
+import com.mod.verity.net.VerityPresenceBridge;
 import com.mod.verity.state.ClientVerityState;
 import com.mod.verity.voice.VoiceHudRenderer;
 import com.mod.verity.voice.VoiceListener;
@@ -40,6 +41,11 @@ public class VerityModClient implements ClientModInitializer {
 
         // --- Chat interceptor: "Hey Verity ..." → local Ollama AI ---
         ClientChatInterceptor.register();
+
+        // --- Mod-to-mod presence: only players who ALSO have VERITY can be
+        // detected, talk assistant-to-assistant, and build friendship.
+        // Works on any server (even fully vanilla) via invisible chat text. ---
+        VerityPresenceBridge.register();
 
         // --- Voice listener ---
         voiceListener = new VoiceListener(query -> {

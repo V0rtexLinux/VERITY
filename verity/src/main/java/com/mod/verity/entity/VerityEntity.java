@@ -70,12 +70,32 @@ public class VerityEntity extends Monster implements GeoAnimatable {
     private int     proximityCheckTimer  = 0;
     private int     idleEscalateCooldown = 0;
 
+    /** Set when this instance was summoned via ECHO_CORE (an "Echo" companion, not a hostile Verity). */
+    private UUID    ownerUUID            = null;
+
+    public void setOwnerUUID(UUID uuid) { this.ownerUUID = uuid; }
+    public UUID getOwnerUUID() { return ownerUUID; }
+    public boolean isEcho() { return ownerUUID != null; }
+
     // ------------------------------------------------------------------ //
     //  Constructor & attributes                                            //
     // ------------------------------------------------------------------ //
     public VerityEntity(EntityType<? extends Monster> type, Level world) {
         super(type, world);
         this.setNoGravity(true);
+    }
+
+    @Override
+    protected net.minecraft.world.InteractionResult mobInteract(Player player, net.minecraft.world.InteractionHand hand) {
+        if (isEcho() && player.isCrouching() && player.getUUID().equals(ownerUUID)) {
+            if (!this.level().isClientSide()) {
+                com.mod.verity.item.EchoCoreItem.returnCoreToPlayer(player, this.getUUID());
+                player.sendSystemMessage(Component.literal("§d[Echo]§r §7...call me again when you need me."));
+                this.discard();
+            }
+            return net.minecraft.world.InteractionResult.SUCCESS;
+        }
+        return super.mobInteract(player, hand);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

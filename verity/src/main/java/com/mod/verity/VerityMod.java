@@ -80,6 +80,11 @@ public class VerityMod implements ModInitializer {
             new Item.Properties().stacksTo(1)
     );
 
+    /** ECHO_CORE — reusable spawn egg for the player's Echo. Never droppable. */
+    public static final Item ECHO_CORE_ITEM = new com.mod.verity.item.EchoCoreItem(
+            new Item.Properties().stacksTo(1)
+    );
+
     // ------------------------------------------------------------------ //
     //  onInitialize                                                        //
     // ------------------------------------------------------------------ //
@@ -94,6 +99,10 @@ public class VerityMod implements ModInitializer {
         // --- Items ---
         Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "verity_orb"),       VERITY_ORB_ITEM);
         Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "twixxels_journal"), TWIXXELS_JOURNAL);
+        Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "echo_core"),         ECHO_CORE_ITEM);
+
+        // --- ECHO_CORE can never sit on the ground ---
+        com.mod.verity.item.EchoCoreDropGuard.register();
 
         // --- Entity attributes ---
         FabricDefaultAttributeRegistry.register(VERITY, VerityEntity.createAttributes());
