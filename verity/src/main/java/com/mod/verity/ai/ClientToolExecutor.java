@@ -8,11 +8,16 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -374,8 +379,10 @@ public class ClientToolExecutor {
         ClientLevel level = mc.level;
         LocalPlayer player = mc.player;
         if (level == null || player == null) return "World not available.";
-        String biome = level.getBiome(player.blockPosition()).unwrapKey()
-            .map(k -> k.location().getPath().replace("_", " ")).orElse("unknown");
+        Biome biomeValue = level.getBiome(player.blockPosition()).value();
+        Registry<Biome> biomeRegistry = level.registryAccess().registry(Registries.BIOME).orElseThrow();
+        ResourceLocation biomeId = biomeRegistry.getKey(biomeValue);
+        String biome = biomeId != null ? biomeId.getPath().replace("_", " ") : "unknown";
         return "§6[Verity]§r You're in a §e" + biome + "§r.";
     }
 
@@ -383,10 +390,13 @@ public class ClientToolExecutor {
         ClientLevel level = mc.level;
         LocalPlayer player = mc.player;
         if (level == null || player == null) return "World not available.";
-        long time = level.getDayTime() % 24000;
+        long time = level.dayTime() % 24000;
         String timeLabel = time < 6000 ? "morning" : time < 12000 ? "afternoon" : time < 13000 ? "sunset" : "night";
         String weather = level.isThundering() ? "thunderstorm" : level.isRaining() ? "rain" : "clear";
-        String dim = level.dimension().location().getPath();
+        String dim = level.dimension().equals(Level.OVERWORLD) ? "overworld"
+            : level.dimension().equals(Level.NETHER) ? "the_nether"
+            : level.dimension().equals(Level.END) ? "the_end"
+            : "custom";
         return String.format("§6[Verity]§r World: time=%s (%d), weather=%s, dimension=%s",
             timeLabel, time, weather, dim);
     }

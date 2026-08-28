@@ -7,12 +7,11 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.component.CustomData;
@@ -51,7 +50,7 @@ public final class EchoCoreHandler {
     public static boolean isEchoCore(ItemStack stack) {
         if (stack == null || stack.isEmpty()) return false;
         CustomData data = stack.get(DataComponents.CUSTOM_DATA);
-        return data != null && data.contains(TAG_ID) && data.copyTag().getBoolean(TAG_ID);
+        return data != null && data.copyTag().getBoolean(TAG_ID);
     }
 
     private static boolean echoActive = false;
@@ -64,10 +63,10 @@ public final class EchoCoreHandler {
         // Right-click (any hand) with Echo Core: summon/recall the local Echo.
         UseItemCallback.EVENT.register((player, world, hand) -> {
             if (hand != InteractionHand.MAIN_HAND || !world.isClientSide()) {
-                return InteractionResultHolder.pass(player.getItemInHand(hand));
+                return InteractionResult.PASS;
             }
             ItemStack stack = player.getItemInHand(hand);
-            if (!isEchoCore(stack)) return InteractionResultHolder.pass(stack);
+            if (!isEchoCore(stack)) return InteractionResult.PASS;
 
             if (!echoActive) {
                 echoActive = true;
@@ -79,7 +78,7 @@ public final class EchoCoreHandler {
                 player.getInventory().add(createEchoCore());
                 player.sendSystemMessage(Component.literal("§d[Echo Core]§r §7O Echo retorna ao núcleo."));
             }
-            return InteractionResultHolder.success(stack);
+            return InteractionResult.SUCCESS;
         });
 
         VerityMod.LOGGER.info("[EchoCoreHandler] Registered — Echo Core is non-droppable and toggleable.");
@@ -102,7 +101,7 @@ public final class EchoCoreHandler {
                 ie.discard();
                 Inventory inv = player.getInventory();
                 if (!inv.add(returned)) {
-                    inv.setItem(inv.selected, returned);
+                    inv.setItem(inv.getSelectedSlot(), returned);
                 }
                 player.sendSystemMessage(Component.literal("§d[Echo Core]§r §7O núcleo voltou para você."));
             }

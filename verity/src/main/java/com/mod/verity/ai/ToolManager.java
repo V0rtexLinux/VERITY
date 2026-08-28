@@ -5,13 +5,17 @@ import com.google.gson.JsonObject;
 import com.mod.verity.VerityMod;
 import com.mod.verity.assistant.VerityAssistant;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.food.FoodData;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -153,10 +157,10 @@ public class ToolManager {
             params -> async(() -> {
                 if (currentPlayer == null) return "No context.";
                 ServerLevel lvl = (ServerLevel) currentPlayer.level();
-                String biome = lvl.getBiome(currentPlayer.blockPosition())
-                    .unwrapKey()
-                    .map(k -> k.location().getPath().replace("_", " "))
-                    .orElse("unknown");
+                Biome biomeValue = lvl.getBiome(currentPlayer.blockPosition()).value();
+                ResourceLocation biomeId = lvl.registryAccess().registry(Registries.BIOME)
+                    .orElseThrow().getKey(biomeValue);
+                String biome = biomeId != null ? biomeId.getPath().replace("_", " ") : "unknown";
                 sendPrivate("§6[Verity]§r You're in a §e" + biome + "§r biome.");
                 return "Biome: " + biome;
             }));
@@ -167,14 +171,17 @@ public class ToolManager {
             params -> async(() -> {
                 if (currentPlayer == null || currentServer == null) return "No context.";
                 ServerLevel lvl  = (ServerLevel) currentPlayer.level();
-                long   dayTime   = lvl.getDayTime() % 24000;
+                long   dayTime   = lvl.dayTime() % 24000;
                 String timeLabel = dayTime < 6000 ? "morning" :
                                    dayTime < 12000 ? "afternoon" :
                                    dayTime < 13000 ? "sunset" : "night";
                 String weather   = lvl.isThundering() ? "thunderstorm" :
                                    lvl.isRaining()    ? "rain" : "clear";
-                String dim       = currentPlayer.level().dimension().location().getPath();
-                String diff      = currentServer.getDifficulty().getKey();
+                String dim       = lvl.dimension().equals(Level.OVERWORLD) ? "overworld"
+                                   : lvl.dimension().equals(Level.NETHER) ? "the_nether"
+                                   : lvl.dimension().equals(Level.END) ? "the_end"
+                                   : "custom";
+                String diff      = lvl.getDifficulty().getKey();
                 int    players   = currentServer.getPlayerList().getPlayers().size();
 
                 String info = String.format(
@@ -654,7 +661,6 @@ public class ToolManager {
             try {
                 currentServer.getCommands().performPrefixedCommand(
                     currentServer.createCommandSourceStack()
-                        .withPermission(4)
                         .withSuppressedOutput(),
                     cmd);
                 VerityMod.LOGGER.info("[VerityAI] Ran command: " + cmd);

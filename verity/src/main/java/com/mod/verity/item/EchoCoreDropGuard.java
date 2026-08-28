@@ -1,9 +1,10 @@
 package com.mod.verity.item;
 
 import com.mod.verity.VerityMod;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 
@@ -18,18 +19,27 @@ public final class EchoCoreDropGuard {
     private EchoCoreDropGuard() {}
 
     public static void register() {
-        ServerTickEvents.END_WORLD_TICK.register(EchoCoreDropGuard::scan);
+        ServerTickEvents.END_SERVER_TICK.register(EchoCoreDropGuard::scanServer);
+    }
+
+    private static void scanServer(MinecraftServer server) {
+        for (ServerLevel level : server.getAllLevels()) {
+            scan(level);
+        }
     }
 
     private static void scan(ServerLevel level) {
-        for (ItemEntity itemEntity : level.getEntitiesOfClass(
-                ItemEntity.class, net.minecraft.world.phys.AABB.INFINITE)) {
+        java.util.List<ItemEntity> stray = new java.util.ArrayList<>();
+        for (Entity entity : level.getEntities().getAll()) {
+            if (entity instanceof ItemEntity itemEntity) stray.add(itemEntity);
+        }
 
+        for (ItemEntity itemEntity : stray) {
             if (itemEntity.getItem().isEmpty()) continue;
             if (!itemEntity.getItem().is(VerityMod.ECHO_CORE_ITEM)) continue;
 
-            Player owner = itemEntity.getThrower() != null
-                    ? level.getPlayerByUUID(itemEntity.getThrower())
+            Player owner = itemEntity.getOwner() != null
+                    ? level.getPlayerByUUID(itemEntity.getOwner())
                     : level.getNearestPlayer(itemEntity, 16);
 
             if (owner == null) {

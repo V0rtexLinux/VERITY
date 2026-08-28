@@ -66,8 +66,8 @@ public class AssistantSocialManager {
         UUID peerId = peer.getUUID();
         int currentFriendship = friendship.getOrDefault(peerId, 0);
 
-        String localName = Minecraft.getInstance().player.getGameProfile().getName();
-        String peerName = peer.getGameProfile().getName();
+        String localName = Minecraft.getInstance().player.getGameProfile().name();
+        String peerName = peer.getGameProfile().name();
 
         String prompt = buildSocialPrompt(localName, peerName, currentFriendship);
 
@@ -119,13 +119,13 @@ public class AssistantSocialManager {
         // Exibe a fala do assistente remoto pro jogador local (só ele vê, via HUD/chat local)
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-        mc.player.displayClientMessage(Component.literal(text), false);
+        mc.player.sendSystemMessage(Component.literal(text));
     }
 
     private static void showLocalSpeech(String line) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return;
-        mc.player.displayClientMessage(Component.literal(line), false);
+        mc.player.sendSystemMessage(Component.literal(line));
     }
 
     public static void adjustFriendship(UUID peerId, int delta) {

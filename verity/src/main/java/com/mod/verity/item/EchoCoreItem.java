@@ -8,6 +8,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipContext;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
@@ -34,7 +35,7 @@ public class EchoCoreItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, Item.TooltipContext context,
+    public void appendHoverText(ItemStack stack, TooltipContext context,
                                  List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.literal("§7A fragment of an Echo, waiting to be called."));
         tooltip.add(Component.literal("§8Right-click to summon. Cannot be dropped."));
@@ -49,7 +50,7 @@ public class EchoCoreItem extends Item {
         BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
 
         VerityEntity echo = new VerityEntity(VerityMod.VERITY, level);
-        echo.moveTo(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+        echo.setPos(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5);
         echo.setOwnerUUID(player.getUUID());
         level.addFreshEntity(echo);
 
