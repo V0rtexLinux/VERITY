@@ -4,9 +4,11 @@ import com.mod.verity.VerityMod;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.entity.EntityTypeTest;
+
+import java.util.List;
 
 /**
  * ECHO_CORE is never allowed to exist as a ground/thrown ItemEntity.
@@ -29,17 +31,14 @@ public final class EchoCoreDropGuard {
     }
 
     private static void scan(ServerLevel level) {
-        java.util.List<ItemEntity> stray = new java.util.ArrayList<>();
-        for (Entity entity : level.getEntities().getAll()) {
-            if (entity instanceof ItemEntity itemEntity) stray.add(itemEntity);
-        }
+        List<ItemEntity> stray = level.getEntities(EntityTypeTest.forClass(ItemEntity.class), e -> true);
 
         for (ItemEntity itemEntity : stray) {
             if (itemEntity.getItem().isEmpty()) continue;
             if (!itemEntity.getItem().is(VerityMod.ECHO_CORE_ITEM)) continue;
 
-            Player owner = itemEntity.getOwner() != null
-                    ? level.getPlayerByUUID(itemEntity.getOwner())
+            Player owner = itemEntity.getOwner() instanceof Player p
+                    ? p
                     : level.getNearestPlayer(itemEntity, 16);
 
             if (owner == null) {
