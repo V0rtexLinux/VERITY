@@ -4,6 +4,7 @@ import com.mod.verity.VerityMod;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.entity.EntityTypeTest;
@@ -31,7 +32,8 @@ public final class EchoCoreDropGuard {
     }
 
     private static void scan(ServerLevel level) {
-        List<ItemEntity> stray = level.getEntities(EntityTypeTest.forClass(ItemEntity.class), e -> true);
+        List<ItemEntity> stray = level.getEntities(
+            EntityTypeTest.<Entity, ItemEntity>forClass(ItemEntity.class), e -> true);
 
         for (ItemEntity itemEntity : stray) {
             if (itemEntity.getItem().isEmpty()) continue;
