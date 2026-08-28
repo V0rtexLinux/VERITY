@@ -292,6 +292,12 @@ Loom: applies banner patterns (banner + dye + pattern item)
         tools.append("  [TOOL:plant_crops:{\"crop\":\"wheat\",\"size\":9}]  — plant crops near player\n");
         tools.append("  [TOOL:harvest_crops:{\"radius\":10}]  — harvest ready crops\n\n");
 
+        tools.append("**AI CONFIGURATION:**\n");
+        tools.append("  [TOOL:switch_ai_model:{}]  — list the local Ollama models installed\n");
+        tools.append("  [TOOL:switch_ai_model:{\"model\":\"llama3:8b\"}]  — switch which Ollama model I run on " +
+            "(downloads it first if it isn't installed yet)\n");
+        tools.append("  Use this whenever the player asks you to change/switch your AI model.\n\n");
+
         if (stage >= 3) {
             tools.append("**SELF-MODIFICATION (Runtime Behavior):**\n");
             tools.append("  [TOOL:modify_behavior:{\"parameter\":\"aggression\",\"value\":\"high\"}]  — change my behavior\n");

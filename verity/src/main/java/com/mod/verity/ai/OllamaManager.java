@@ -532,9 +532,11 @@ public class OllamaManager {
     }
     
     /**
-     * Pull a model if it's not already available.
+     * Pull a model if it's not already available. Public so callers (e.g. an
+     * AI tool letting the player switch models) can make sure a model exists
+     * locally before switching to it.
      */
-    private static void pullModelIfNeeded(String modelName) {
+    public static void pullModelIfNeeded(String modelName) {
         try {
             // Check if model exists
             HttpRequest checkRequest = HttpRequest.newBuilder()

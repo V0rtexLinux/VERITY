@@ -67,6 +67,7 @@ public class ClientToolExecutor {
                     case "spawn_entity"           -> clientCmd("summon minecraft:" + str(args,"entity","sheep"), mc);
                     case "modify_behavior"        -> { SelfModificationEngine.modifyBehavior(str(args,"parameter",""), str(args,"value","normal")); yield "Behavior modified."; }
                     case "modify_ai_parameter"    -> { SelfModificationEngine.modifyAiParameter(str(args,"param",""), str(args,"value","normal")); yield "AI parameter modified."; }
+                    case "switch_ai_model"        -> switchAiModel(args);
                     case "execute_command"        -> clientCmd(str(args,"command",""), mc);
                     default -> {
                         VerityMod.LOGGER.warn("[ClientToolExecutor] Unknown tool: " + toolName);
@@ -457,6 +458,23 @@ public class ClientToolExecutor {
             case "invisibility"    -> "§6[Verity]§r Invisibility: Night Vision → Fermented Spider Eye.";
             default -> "§6[Verity]§r Start with Water Bottle → Nether Wart = Awkward Potion, then add ingredient.";
         };
+    }
+
+    private static String switchAiModel(JsonObject args) {
+        String model = str(args, "model", "").trim();
+
+        if (model.isBlank()) {
+            java.util.List<String> models = OllamaManager.listModels().join();
+            if (models.isEmpty()) {
+                return "§6[Verity]§r §7Não consegui listar os modelos do Ollama.";
+            }
+            return "§6[Verity]§r §7Modelos disponíveis: §f" + String.join(", ", models) +
+                "\n§7Modelo atual: §f" + OllamaManager.getDefaultModel();
+        }
+
+        OllamaManager.pullModelIfNeeded(model);
+        OllamaManager.setDefaultModel(model);
+        return "§6[Verity]§r §7Pronto — agora estou rodando em §f" + model + "§7.";
     }
 
     private static String clientCmd(String command, Minecraft mc) {
