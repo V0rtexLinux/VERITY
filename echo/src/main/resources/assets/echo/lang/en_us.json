@@ -1,0 +1,26 @@
+{
+  "entity.echo.echo_orb": "ECHO Orb",
+  "item.echo.echo_core":  "ECHO Core",
+
+  "echo.name": "ECHO",
+  "echo.tagline": "Your local, offline assistant.",
+
+  "echo.chat.greeting":       "Online. Say \"hey echo\" whenever you need me.",
+  "echo.chat.thinking":       "thinking...",
+  "echo.chat.no_backend":     "My local model isn't running yet.",
+  "echo.chat.help":           "Ask me anything, or say \"echo help\".",
+  "echo.chat.death_recorded": "Noted where you fell.",
+
+  "echo.tuner.applied":  "Tuned your settings.",
+  "echo.tuner.preview":  "Settings I would use.",
+  "echo.tuner.disabled": "The settings tuner is switched off in echo.json.",
+
+  "echo.voice.loading":    "ECHO — starting voice...",
+  "echo.voice.waiting":    "ECHO — say \"hey echo\"",
+  "echo.voice.listening":  "ECHO — listening",
+  "echo.voice.processing": "ECHO — thinking",
+
+  "echo.item.core.hint":    "Right-click to call or dismiss the orb.",
+  "echo.item.core.backend": "Backend",
+  "echo.item.core.model":   "Model"
+}
