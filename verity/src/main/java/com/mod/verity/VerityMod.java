@@ -43,6 +43,14 @@ public class VerityMod implements ModInitializer {
         return ResourceKey.create(Registries.ENTITY_TYPE, Identifier.fromNamespaceAndPath(MOD_ID, path));
     }
 
+    private static ResourceKey<Block> blockKey(String path) {
+        return ResourceKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath(MOD_ID, path));
+    }
+
+    private static ResourceKey<Item> itemKey(String path) {
+        return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, path));
+    }
+
     public static final EntityType<VerityEntity> VERITY = Registry.register(
             BuiltInRegistries.ENTITY_TYPE,
             VerityMod.entityKey("verity"),
@@ -58,6 +66,7 @@ public class VerityMod implements ModInitializer {
     // ------------------------------------------------------------------ //
     public static final Block VERITY_BOX = new VerityBoxBlock(
             BlockBehaviour.Properties.of()
+                    .setId(blockKey("verity_box"))
                     .mapColor(MapColor.GOLD)
                     .strength(2.0f)
                     .noOcclusion()
@@ -65,24 +74,24 @@ public class VerityMod implements ModInitializer {
     );
 
     public static final Item VERITY_BOX_ITEM = new BlockItem(
-            VERITY_BOX, new Item.Properties()
+            VERITY_BOX, new Item.Properties().setId(itemKey("verity_box"))
     );
 
     // ------------------------------------------------------------------ //
     //  Items                                                               //
     // ------------------------------------------------------------------ //
     public static final Item VERITY_ORB_ITEM = new VerityOrbItem(
-            new Item.Properties().stacksTo(1)
+            new Item.Properties().setId(itemKey("verity_orb")).stacksTo(1)
     );
 
     /** Twixxel's Journal — contains ROT21 cipher "XJSIMNRMTRJ" = "SENDHIMHOME". */
     public static final Item TWIXXELS_JOURNAL = new Item(
-            new Item.Properties().stacksTo(1)
+            new Item.Properties().setId(itemKey("twixxels_journal")).stacksTo(1)
     );
 
     /** ECHO_CORE — reusable spawn egg for the player's Echo. Never droppable. */
     public static final Item ECHO_CORE_ITEM = new com.mod.verity.item.EchoCoreItem(
-            new Item.Properties().stacksTo(1)
+            new Item.Properties().setId(itemKey("echo_core")).stacksTo(1)
     );
 
     // ------------------------------------------------------------------ //
@@ -93,13 +102,13 @@ public class VerityMod implements ModInitializer {
         LOGGER.info("[Verity] Initializing...");
 
         // --- Blocks ---
-        Registry.register(BuiltInRegistries.BLOCK, Identifier.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX);
-        Registry.register(BuiltInRegistries.ITEM,  Identifier.fromNamespaceAndPath(MOD_ID, "verity_box"), VERITY_BOX_ITEM);
+        Registry.register(BuiltInRegistries.BLOCK, blockKey("verity_box"), VERITY_BOX);
+        Registry.register(BuiltInRegistries.ITEM,  itemKey("verity_box"), VERITY_BOX_ITEM);
 
         // --- Items ---
-        Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "verity_orb"),       VERITY_ORB_ITEM);
-        Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "twixxels_journal"), TWIXXELS_JOURNAL);
-        Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "echo_core"),         ECHO_CORE_ITEM);
+        Registry.register(BuiltInRegistries.ITEM, itemKey("verity_orb"),       VERITY_ORB_ITEM);
+        Registry.register(BuiltInRegistries.ITEM, itemKey("twixxels_journal"), TWIXXELS_JOURNAL);
+        Registry.register(BuiltInRegistries.ITEM, itemKey("echo_core"),         ECHO_CORE_ITEM);
 
         // --- ECHO_CORE can never sit on the ground ---
         com.mod.verity.item.EchoCoreDropGuard.register();
