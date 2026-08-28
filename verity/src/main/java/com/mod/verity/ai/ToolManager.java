@@ -5,9 +5,7 @@ import com.google.gson.JsonObject;
 import com.mod.verity.VerityMod;
 import com.mod.verity.assistant.VerityAssistant;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
@@ -15,7 +13,6 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.food.FoodData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CropBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -157,9 +154,11 @@ public class ToolManager {
             params -> async(() -> {
                 if (currentPlayer == null) return "No context.";
                 ServerLevel lvl = (ServerLevel) currentPlayer.level();
-                Biome biomeValue = lvl.getBiome(currentPlayer.blockPosition()).value();
-                ResourceLocation biomeId = lvl.registryAccess().registry(Registries.BIOME)
-                    .orElseThrow().getKey(biomeValue);
+                net.minecraft.world.level.biome.Biome biomeValue =
+                    lvl.getBiome(currentPlayer.blockPosition()).value();
+                net.minecraft.core.Registry<net.minecraft.world.level.biome.Biome> biomeRegistry =
+                    lvl.registryAccess().lookupOrThrow(net.minecraft.core.registries.Registries.BIOME);
+                net.minecraft.resources.Identifier biomeId = biomeRegistry.getKey(biomeValue);
                 String biome = biomeId != null ? biomeId.getPath().replace("_", " ") : "unknown";
                 sendPrivate("§6[Verity]§r You're in a §e" + biome + "§r biome.");
                 return "Biome: " + biome;
@@ -171,7 +170,7 @@ public class ToolManager {
             params -> async(() -> {
                 if (currentPlayer == null || currentServer == null) return "No context.";
                 ServerLevel lvl  = (ServerLevel) currentPlayer.level();
-                long   dayTime   = lvl.dayTime() % 24000;
+                long   dayTime   = lvl.getGameTime() % 24000;
                 String timeLabel = dayTime < 6000 ? "morning" :
                                    dayTime < 12000 ? "afternoon" :
                                    dayTime < 13000 ? "sunset" : "night";
@@ -181,7 +180,7 @@ public class ToolManager {
                                    : lvl.dimension().equals(Level.NETHER) ? "the_nether"
                                    : lvl.dimension().equals(Level.END) ? "the_end"
                                    : "custom";
-                String diff      = lvl.getDifficulty().getKey();
+                String diff      = lvl.getDifficulty().getSerializedName();
                 int    players   = currentServer.getPlayerList().getPlayers().size();
 
                 String info = String.format(

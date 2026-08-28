@@ -386,8 +386,8 @@ Swear naturally if the context calls for it (stage 4-5 Verity doesn't filter her
         context.append(String.format("- XP Level: %d  (%.0f%%)\n", player.experienceLevel,
             player.experienceProgress * 100));
         context.append(String.format("- World time: %d ticks (%s)\n",
-            player.level().dayTime() % 24000,
-            player.level().dayTime() % 24000 < 13000 ? "Day" : "Night"));
+            player.level().getGameTime() % 24000,
+            player.level().getGameTime() % 24000 < 13000 ? "Day" : "Night"));
         context.append(String.format("- Is raining: %s  Thunder: %s\n",
             player.level().isRaining(),
             player.level().isThundering()));

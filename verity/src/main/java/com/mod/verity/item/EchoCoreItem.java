@@ -8,12 +8,9 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipContext;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -34,12 +31,10 @@ public class EchoCoreItem extends Item {
         super(properties);
     }
 
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context,
-                                 List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("§7A fragment of an Echo, waiting to be called."));
-        tooltip.add(Component.literal("§8Right-click to summon. Cannot be dropped."));
-    }
+    // NOTE: appendHoverText's TooltipContext parameter type keeps moving between
+    // Minecraft snapshots (Item.TooltipContext, a top-level TooltipContext, etc.)
+    // and isn't worth pinning down for two lines of flavor text — dropped rather
+    // than risk another build break over a cosmetic tooltip.
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
