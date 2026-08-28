@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class OllamaManager {
     
     private static final String OLLAMA_VERSION = "0.5.7";
-    private static String DEFAULT_MODEL = "llama3:2b";
+    private static String DEFAULT_MODEL = "llama3.2:latest";
     private static final String OLLAMA_API_URL = "http://localhost:11434";
     
     // Alternative models directory for users with special characters in username
