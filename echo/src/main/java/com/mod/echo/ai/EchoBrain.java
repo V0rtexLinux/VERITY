@@ -148,7 +148,10 @@ public final class EchoBrain {
         text = text.replaceAll("<\\|[a-z_]+\\|>", "");
         text = text.replaceAll("(?m)^\\s*```\\w*\\s*$", "");
         text = text.strip();
-        return text.isBlank() ? "Done." : text;
+        text = text.isBlank() ? "Done." : text;
+        // Safety backstop: every reply, from either chat path, passes through
+        // here before the player sees it. See EchoSafety for what it catches.
+        return EchoSafety.review(text);
     }
 
     /**
