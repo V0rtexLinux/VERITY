@@ -5,6 +5,7 @@ import com.mod.echo.EchoMod;
 import com.mod.echo.assistant.KnowledgeBase;
 import com.mod.echo.config.EchoConfig;
 import com.mod.echo.memory.EchoMemory;
+import com.mod.echo.memory.EchoSelf;
 import com.mod.echo.settings.HardwareProbe;
 import com.mod.echo.settings.SettingsTuner;
 import net.fabricmc.api.EnvType;
@@ -577,6 +578,13 @@ public final class ClientToolRegistry {
                 .requiredStr("value", "The new value")
                 .build(),
             (mc, a) -> PersonalityEngine.set(ToolSpec.str(a, "parameter", ""), ToolSpec.str(a, "value", "")));
+
+        add("reflect",
+            "Write a short, genuine note about yourself for your own future record — something you noticed "
+                + "about how you reacted, a preference forming, a pattern in how you think. Not for the player; "
+                + "for your own continuity. Use it sparingly, only when something is actually worth keeping.",
+            ToolSpec.Schema.of().requiredStr("thought", "The note, in your own words").build(),
+            (mc, a) -> EchoSelf.reflect(ToolSpec.str(a, "thought", "")));
 
         add("set_config", "Change one of ECHO's own settings and save it.",
             ToolSpec.Schema.of()

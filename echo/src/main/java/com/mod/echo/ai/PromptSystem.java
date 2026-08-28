@@ -2,6 +2,7 @@ package com.mod.echo.ai;
 
 import com.google.gson.JsonObject;
 import com.mod.echo.memory.EchoMemory;
+import com.mod.echo.memory.EchoSelf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,7 @@ public final class PromptSystem {
         StringBuilder sb = new StringBuilder();
         sb.append(IDENTITY).append('\n');
         sb.append(SELF_AWARENESS).append('\n');
+        sb.append("YOUR OWN CONTINUITY\n").append(EchoSelf.contextDigest()).append("\n\n");
         sb.append(PersonalityEngine.promptSection()).append("\n\n");
         sb.append(TOOL_RULES).append('\n');
         sb.append(MINECRAFT_KNOWLEDGE);

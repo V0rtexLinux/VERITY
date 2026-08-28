@@ -3,6 +3,7 @@ package com.mod.echo.ai;
 import com.google.gson.JsonObject;
 import com.mod.echo.EchoMod;
 import com.mod.echo.config.EchoConfig;
+import com.mod.echo.memory.EchoSelf;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +67,10 @@ public final class EchoBrain {
         }
 
         String context = safely(bridge::worldContext);
-        List<JsonObject> history = CONVERSATIONS.computeIfAbsent(key,
-                k -> PromptSystem.newConversation(context, bridge.memoryKey()));
+        List<JsonObject> history = CONVERSATIONS.computeIfAbsent(key, k -> {
+            EchoSelf.noteConversationStarted();
+            return PromptSystem.newConversation(context, bridge.memoryKey());
+        });
 
         // The world moves between turns, so the situation block is rewritten
         // every request rather than left as it was when the chat started.
