@@ -3,6 +3,9 @@ package com.mod.verity;
 import com.mod.verity.ai.DependencyAutoSetup;
 import com.mod.verity.ai.VerityAI;
 import com.mod.verity.block.VerityBoxBlock;
+import com.mod.verity.echo.EchoCoreItem;
+import com.mod.verity.echo.EchoEntity;
+import com.mod.verity.echo.network.EchoHandshakePacket;
 import com.mod.verity.entity.VerityEntity;
 import com.mod.verity.event.ChatHandler;
 import com.mod.verity.event.FoodTracker;
@@ -53,6 +56,17 @@ public class VerityMod implements ModInitializer {
                     .build(VerityMod.entityKey("verity"))
     );
 
+    /** Echo — the friendly virtual-assistant companion. See {@link EchoEntity}. */
+    public static final EntityType<EchoEntity> ECHO = Registry.register(
+            BuiltInRegistries.ENTITY_TYPE,
+            VerityMod.entityKey("echo"),
+            EntityType.Builder.<EchoEntity>of(EchoEntity::new, MobCategory.CREATURE)
+                    .sized(0.4f, 0.4f)
+                    .clientTrackingRange(16)
+                    .updateInterval(1)
+                    .build(VerityMod.entityKey("echo"))
+    );
+
     // ------------------------------------------------------------------ //
     //  Blocks                                                              //
     // ------------------------------------------------------------------ //
@@ -80,6 +94,11 @@ public class VerityMod implements ModInitializer {
             new Item.Properties().stacksTo(1)
     );
 
+    /** Echo Core — right-click to summon Echo. See {@link EchoCoreItem}. */
+    public static final Item ECHO_CORE_ITEM = new EchoCoreItem(
+            new Item.Properties().stacksTo(1).rarity(net.minecraft.world.item.Rarity.RARE)
+    );
+
     // ------------------------------------------------------------------ //
     //  onInitialize                                                        //
     // ------------------------------------------------------------------ //
@@ -94,9 +113,11 @@ public class VerityMod implements ModInitializer {
         // --- Items ---
         Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "verity_orb"),       VERITY_ORB_ITEM);
         Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "twixxels_journal"), TWIXXELS_JOURNAL);
+        Registry.register(BuiltInRegistries.ITEM, Identifier.fromNamespaceAndPath(MOD_ID, "echo_core"),        ECHO_CORE_ITEM);
 
         // --- Entity attributes ---
         FabricDefaultAttributeRegistry.register(VERITY, VerityEntity.createAttributes());
+        FabricDefaultAttributeRegistry.register(ECHO,   EchoEntity.createAttributes());
 
         // --- Events ---
         ChatHandler.register();
@@ -105,6 +126,7 @@ public class VerityMod implements ModInitializer {
 
         // --- Network ---
         VoicePacket.registerServer();
+        EchoHandshakePacket.registerServer();
 
         // --- Player join / death hooks ---
         registerPlayerJoinEvent();

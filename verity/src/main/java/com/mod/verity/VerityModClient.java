@@ -1,5 +1,7 @@
 package com.mod.verity;
 
+import com.mod.verity.echo.EchoRenderer;
+import com.mod.verity.echo.compat.EchoCompatibility;
 import com.mod.verity.entity.VerityModel;
 import com.mod.verity.entity.VerityRenderer;
 import com.mod.verity.event.ClientChatInterceptor;
@@ -34,9 +36,13 @@ public class VerityModClient implements ClientModInitializer {
     public void onInitializeClient() {
         // --- GeckoLib entity renderer ---
         EntityRendererRegistry.register(VerityMod.VERITY, VerityRenderer::new);
+        EntityRendererRegistry.register(VerityMod.ECHO, EchoRenderer::new);
 
         // --- Client-side state (works on servers without the mod) ---
         ClientVerityState.load();
+
+        // --- Echo: detect native-mod vs compatibility mode, run fallback social AI ---
+        EchoCompatibility.register();
 
         // --- Chat interceptor: "Hey Verity ..." → local Ollama AI ---
         ClientChatInterceptor.register();

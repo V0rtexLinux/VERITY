@@ -4,6 +4,8 @@
   "item.verity.verity_box":       "Verity's Box",
   "item.verity.verity_orb":       "Verity Orb",
   "item.verity.twixxels_journal": "Twixxel's Journal",
+  "item.verity.echo_core":        "Echo Core",
+  "entity.verity.echo":           "Echo",
   "itemGroup.verity.main":        "Verity Mod",
 
   "death.attack.verity": "%1$s was taken by Verity",

@@ -3,7 +3,8 @@
   "package": "com.mod.verity.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "WindowStalkingMixin"
+    "WindowStalkingMixin",
+    "EchoDropPreventionMixin"
   ],
   "client": [],
   "injectors": {

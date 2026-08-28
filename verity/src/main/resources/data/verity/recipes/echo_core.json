@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " A ",
+    "ARA",
+    " L "
+  ],
+  "key": {
+    "A": { "item": "minecraft:amethyst_shard" },
+    "R": { "item": "minecraft:redstone_block" },
+    "L": { "item": "minecraft:lodestone" }
+  },
+  "result": {
+    "item": "verity:echo_core",
+    "count": 1
+  }
+}
