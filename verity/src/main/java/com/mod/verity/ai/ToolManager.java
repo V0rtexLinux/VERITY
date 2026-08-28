@@ -633,6 +633,32 @@ public class ToolManager {
                 return result;
             }));
 
+        register("switch_ai_model",
+            "List the local Ollama models available, or switch which one Verity's brain runs on. " +
+            "Leave 'model' empty to just list what's installed.",
+            p1("model", "string", "Ollama model name to switch to, e.g. 'llama3:8b'. Omit to list available models."),
+            params -> async(() -> {
+                String model = str(params, "model", "").trim();
+
+                if (model.isBlank()) {
+                    List<String> models = OllamaManager.listModels().join();
+                    if (models.isEmpty()) {
+                        sendPrivate("§6[Verity]§r §7Não consegui listar os modelos do Ollama.");
+                        return "No models found.";
+                    }
+                    sendPrivate("§6[Verity]§r §7Modelos disponíveis: §f" + String.join(", ", models) +
+                        "\n§7Modelo atual: §f" + OllamaManager.getDefaultModel());
+                    return "Available models: " + String.join(", ", models);
+                }
+
+                sendPrivate("§6[Verity]§r §7Trocando para o modelo §f" + model +
+                    "§7... (pode baixar o modelo se ele ainda não existir localmente)");
+                OllamaManager.pullModelIfNeeded(model);
+                OllamaManager.setDefaultModel(model);
+                sendPrivate("§6[Verity]§r §7Pronto — agora estou rodando em §f" + model + "§7.");
+                return "Switched AI model to: " + model;
+            }));
+
         register("execute_command",
             "Execute ANY Minecraft server command. I have operator privileges.",
             p1("command", "string", "Command without leading slash. E.g. 'say Hello' or 'effect give @a speed 30 2'"),
