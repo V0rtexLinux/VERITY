@@ -9,8 +9,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.entity.EntityTypeTest;
 
-import java.util.List;
-
 /**
  * ECHO_CORE is never allowed to exist as a ground/thrown ItemEntity.
  * Every server tick we scan for stray ECHO_CORE ItemEntities (dropped,
@@ -32,7 +30,7 @@ public final class EchoCoreDropGuard {
     }
 
     private static void scan(ServerLevel level) {
-        List<ItemEntity> stray = level.getEntities(
+        var stray = level.getEntities(
             EntityTypeTest.<Entity, ItemEntity>forClass(ItemEntity.class), e -> true);
 
         for (ItemEntity itemEntity : stray) {
