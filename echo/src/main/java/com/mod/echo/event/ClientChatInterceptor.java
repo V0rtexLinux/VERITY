@@ -7,6 +7,7 @@ import com.mod.echo.ai.ClientToolRegistry;
 import com.mod.echo.ai.EchoBrain;
 import com.mod.echo.ai.LocalAI;
 import com.mod.echo.ai.PersonalityEngine;
+import com.mod.echo.bio.BioSignal;
 import com.mod.echo.config.EchoConfig;
 import com.mod.echo.memory.EchoMemory;
 import com.mod.echo.net.VoiceQueryPayload;
@@ -185,6 +186,11 @@ public final class ClientChatInterceptor {
                 sb.append(" in singleplayer");
             }
             sb.append(".\n").append(HardwareProbe.probe().describe()).append('\n');
+
+            if (EchoConfig.get().bioSignalEnabled) {
+                BioSignal.Reading bio = BioSignal.read();
+                if (bio.connected()) sb.append(BioSignal.describe()).append('\n');
+            }
 
             if (mc.player != null && mc.level != null) {
                 var pos = mc.player.blockPosition();

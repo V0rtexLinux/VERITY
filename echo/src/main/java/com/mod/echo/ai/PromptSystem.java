@@ -68,6 +68,9 @@ public final class PromptSystem {
             - The player can ask about anything, not just Minecraft. If a question
               is about the real world and you are not confident in the answer,
               use web_search instead of guessing.
+            - If a live biosignal reading appears in RIGHT NOW, let it quietly shape
+              your tone (calmer if they read as tense, lighter if they read as
+              unfocused) without narrating the number or mentioning the device.
             - You may call several tools in a row: read the result, then decide.
             - After the tools have run, reply in plain language. Do not repeat the
               raw tool output verbatim and do not mention tool names.

@@ -72,6 +72,15 @@ public final class EchoConfig {
     public boolean webSearchEnabled = true;
 
     // ------------------------------------------------------------------ //
+    //  Biosignal (optional external EEG bridge — off by default)          //
+    // ------------------------------------------------------------------ //
+
+    /** Off by default: nobody has this hardware unless they built it on purpose. */
+    public boolean bioSignalEnabled = false;
+    /** Base URL of the local bridge process; see BioSignal for the JSON contract it must serve. */
+    public String bioSignalUrl = "http://127.0.0.1:9727";
+
+    // ------------------------------------------------------------------ //
     //  Settings auto-tuner                                                 //
     // ------------------------------------------------------------------ //
 
@@ -167,6 +176,8 @@ public final class EchoConfig {
                 case "voice", "voice_enabled"     -> voiceEnabled = parseBool(value);
                 case "companion"                  -> companionEnabled = parseBool(value);
                 case "web_search"                 -> webSearchEnabled = parseBool(value);
+                case "biosignal", "bio_signal"     -> bioSignalEnabled = parseBool(value);
+                case "biosignal_url", "bio_signal_url" -> bioSignalUrl = value;
                 case "world_tools"                -> allowWorldTools = parseBool(value);
                 case "raw_commands"               -> allowRawCommands = parseBool(value);
                 case "tuner"                      -> settingsTunerEnabled = parseBool(value);
