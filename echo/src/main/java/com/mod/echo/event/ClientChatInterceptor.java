@@ -112,6 +112,7 @@ public final class ClientChatInterceptor {
                      echo fps         current performance report
                      echo tools       everything I can do here
                      echo models      models installed locally
+                     echo model <id>  switch to that model right now, no AI needed
                      echo config      show my configuration
                      echo set <k> <v> change one setting
                      echo reset       forget this conversation""";
@@ -140,6 +141,12 @@ public final class ClientChatInterceptor {
                     ? "No models installed.\n" + LocalAI.setupHelp()
                     : "Installed models:\n  " + String.join("\n  ", models)
                       + "\nCurrently using: " + LocalAI.getModel();
+        }
+        if (q.startsWith("model ") || q.startsWith("modelo ")) {
+            String modelId = q.substring(q.indexOf(' ') + 1).strip();
+            return modelId.isEmpty()
+                    ? "Give me a model name, e.g. \"echo model llama3.1\". Say \"echo models\" to list them."
+                    : LocalAI.setModel(modelId);
         }
         if (q.equals("config") || q.equals("settings")) {
             return "Configuration (config/echo.json):\n" + EchoConfig.get().summary();

@@ -129,6 +129,12 @@ public final class ChatHandler {
                     : "Installed models:\n  " + String.join("\n  ", models)
                       + "\nCurrently using: " + LocalAI.getModel();
         }
+        if (q.startsWith("model ") || q.startsWith("modelo ")) {
+            String modelId = q.substring(q.indexOf(' ') + 1).strip();
+            return modelId.isEmpty()
+                    ? "Give me a model name, e.g. \"echo model llama3.1\". Say \"echo models\" to list them."
+                    : LocalAI.setModel(modelId);
+        }
         if (q.equals("tune") || q.equals("optimize") || q.equals("otimizar")) {
             SettingsRequestPayload.sendToPlayer(player, "auto",
                     EchoConfig.get().settingsTunerTargetFps, true);
@@ -167,6 +173,7 @@ public final class ChatHandler {
                  echo status        which local model I'm running on
                  echo tools         everything I can do
                  echo models        models installed locally
+                 echo model <id>    switch to that model right now, no AI needed
                  echo tune          retune your Minecraft settings now
                  echo config        show my configuration
                  echo set <k> <v>   change one setting
