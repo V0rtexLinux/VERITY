@@ -111,11 +111,11 @@ public class EchoMod implements ModInitializer {
 
     private static void registerPlayerEvents() {
         ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
-            // echo.net is whitelisted at the vanilla level already (only the owner's account
-            // can even attempt to connect); this is the extra check that a whitelisted
-            // account is actually running the ECHO client, not a modless one that would
-            // just get a broken, mod-dependent world with no way to talk to ECHO.
-            if (EchoConfig.get().privateWorld
+            // This only ever kicks in on echo.net: everyone joining it is on the same
+            // LAN already, so this is the check that they are actually running the
+            // ECHO client, not a modless one that would just get a broken, mod-dependent
+            // world with no way to talk to ECHO.
+            if (com.mod.echo.hosting.EchoPrivateWorld.is(server)
                     && !ServerPlayNetworking.canSend(handler.player, SettingsRequestPayload.TYPE)) {
                 handler.disconnect(Component.literal(
                         "This is echo.net, a private world for ECHO and its player — "

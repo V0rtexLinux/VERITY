@@ -8,6 +8,9 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
+import net.minecraft.server.integrated.IntegratedServer;
+import net.minecraft.world.level.GameType;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -31,41 +34,43 @@ import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 
 /**
- * Spins up a small, private, whitelisted dedicated Fabric server — branded
- * "echo.net" — that exists only for the player and ECHO. It is separate from
- * whatever world the player is in when they ask for it: a real second server
- * process, its own save, its own whitelist.
+ * Opens "echo.net" — ECHO's own private, whitelisted world — permanently
+ * whenever the platform allows it: a real separate dedicated server process,
+ * with its own save, that keeps running after the player leaves or closes
+ * the game entirely.
  *
- * <h2>What "echo.net" actually means</h2>
- * There is no real internet domain being registered or pointed anywhere —
- * that would require actually owning that DNS name and forwarding a router
- * port, neither of which mod code can do. "echo.net" here is the server's
- * display name and MOTD; you connect to it the same way as any other private
- * server, by IP and port (printed when hosting finishes).
- *
- * <h2>Honesty about what's verified</h2>
- * This is the least-tested system in the whole mod: nothing in this class can
- * be exercised in the sandboxed environment it was written in (no ability to
- * launch a real dedicated server or reach Mojang/Fabric's servers from
- * there), so every step here is running for the first time on the player's
- * own device. Every failure path below reports specifically what went wrong
- * instead of pretending success — treat the first real run as a test, not a
- * guarantee.
- *
- * <h2>Platform reality</h2>
+ * <h2>The fallback, and why it exists</h2>
  * Spawning a second JVM process needs a real desktop-style OS process model.
  * Mobile launchers (PojavLauncher-style apps, including Mojo Launcher) run
- * the game inside their own app sandbox and very likely cannot do this —
- * {@link #canSpawnProcess()} checks for real before attempting anything, and
- * fails with a clear explanation rather than a confusing crash.
+ * the game inside their own app sandbox and very likely cannot do this.
+ * {@link #canSpawnProcess()} checks for real before attempting anything; when
+ * it fails, this falls back to opening the player's current session to LAN
+ * instead (the same "echo.net" name and mod-only gate) — strictly worse
+ * (it dies the moment the player leaves the world, exactly like vanilla's own
+ * "Open to LAN" always has), but still usable rather than a dead end. The
+ * very first time that fallback runs, creating the save itself needs one
+ * click through Minecraft's own "Create New World" screen — recreating that
+ * screen's internal setup by hand from mod code would mean guessing several
+ * interlocking, version-sensitive internal constructors with no way to
+ * verify any of them; delegating to the real screen sidesteps that risk
+ * entirely. Every later "echo host" reopens it with zero clicks.
+ *
+ * <h2>What "echo.net" means</h2>
+ * A display name (MOTD / level name) — not a real internet domain. That
+ * would mean actually owning that DNS name and forwarding a router port,
+ * neither of which mod code can do. You still connect by IP.
+ *
+ * <h2>Honesty about what's verified</h2>
+ * Nothing here can be exercised in the sandboxed environment this was
+ * written in — no ability to launch a real dedicated server, spawn a second
+ * process, or reach Mojang/Fabric's servers from there — so every step is
+ * running for the first time on the player's own device. Every failure path
+ * reports specifically what went wrong instead of pretending success.
  */
 @Environment(EnvType.CLIENT)
 public final class EchoServerHost {
 
     private EchoServerHost() {}
-
-    public static final String DISPLAY_NAME = "echo.net";
-    public static final String MOTD = "o mundo de amigos e assistentes virtuais, onde a harmonia nunca vai ser quebrada";
 
     // Must match gradle.properties — this is the version echo.net's own copy of the mod runs.
     private static final String MC_VERSION = "26.1.2";
@@ -79,85 +84,105 @@ public final class EchoServerHost {
     private static volatile int port = -1;
 
     public static boolean isRunning() { return process != null && process.isAlive(); }
-    public static int port() { return port; }
 
-    /** Shown to the player before hosting starts for the first time. */
+    /** Shown to the player before hosting starts. Only strictly needed when a real server jar gets downloaded
+     *  (the dedicated path), but shown either way since there's no way to know in advance which path will run. */
     public static String eulaNotice() {
         return "Hospedar echo.net aceita automaticamente o EULA da Mojang em seu nome "
                 + "(minecraft.net/eula) — a mesma licença que você já aceitou pra jogar.";
     }
 
+    private record Attempt(String dedicatedResult, String fallbackNotice) {}
+
     public static CompletableFuture<String> host() {
-        return CompletableFuture.supplyAsync(EchoServerHost::hostSync);
-    }
-
-    public static synchronized String stop() {
-        if (!isRunning()) return "echo.net isn't running.";
-        process.destroy();
-        try {
-            process.waitFor(10, TimeUnit.SECONDS);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        if (isRunning()) {
+            return CompletableFuture.completedFuture("echo.net is already running at 127.0.0.1:" + port + ".");
         }
-        if (process.isAlive()) process.destroyForcibly();
-        process = null;
-        port = -1;
-        return "Stopped echo.net.";
+
+        return CompletableFuture.supplyAsync(EchoServerHost::attemptDedicated)
+                .thenCompose(attempt -> attempt.dedicatedResult() != null
+                        ? CompletableFuture.completedFuture(attempt.dedicatedResult())
+                        : fallBackToLan(attempt.fallbackNotice()));
+    }
+
+    public static String stop() {
+        if (isRunning()) {
+            process.destroy();
+            try {
+                process.waitFor(10, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            if (process.isAlive()) process.destroyForcibly();
+            process = null;
+            port = -1;
+            return "Stopped echo.net.";
+        }
+
+        Minecraft mc = Minecraft.getInstance();
+        IntegratedServer server = mc.getSingleplayerServer();
+        if (server != null && EchoPrivateWorld.is(server) && server.isPublished()) {
+            return "echo.net is running in LAN mode, which has no way to close it separately — "
+                    + "leave the world (Save and Quit to Title) to stop it.";
+        }
+        return "echo.net isn't running.";
     }
 
     // ------------------------------------------------------------------ //
-    //  Hosting                                                             //
+    //  Primary: a real, separate, permanent dedicated server               //
     // ------------------------------------------------------------------ //
 
-    private static synchronized String hostSync() {
-        if (isRunning()) return "echo.net is already running at 127.0.0.1:" + port + ".";
+    private static synchronized Attempt attemptDedicated() {
+        if (!canSpawnProcess()) {
+            return new Attempt(null,
+                    "This environment can't start a separate server process — common on Android/launchers like "
+                            + "Mojo, since they run the game inside their own app sandbox with no normal OS "
+                            + "process rights.");
+        }
+        try {
+            return new Attempt(hostDedicatedSync(), null);
+        } catch (Exception e) {
+            EchoMod.LOGGER.warn("Could not start a dedicated echo.net: {}", e.toString());
+            return new Attempt(null, "Couldn't start a separate echo.net process (" + e.getMessage() + ").");
+        }
+    }
 
+    private static String hostDedicatedSync() throws Exception {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return "I need to know who's hosting — try that again once you're in a world.";
         UUID ownerId = mc.player.getUUID();
         String ownerName = mc.player.getName().getString();
 
-        if (!canSpawnProcess()) {
-            return "This environment won't let me start a separate server process — common on Android/launchers "
-                    + "like Mojo, since they run the game inside their own app sandbox without normal OS process "
-                    + "rights. echo.net needs a real desktop-style install for now.";
+        Path root = FabricLoader.getInstance().getGameDir().resolve("echo-server");
+        Files.createDirectories(root);
+
+        Path launchJar = root.resolve("fabric-server-launch.jar");
+        if (Files.notExists(launchJar) || Files.size(launchJar) == 0) {
+            EchoMod.LOGGER.info("Downloading echo.net's server launcher (first time only)...");
+            downloadServerLauncher(launchJar);
         }
 
-        try {
-            Path root = FabricLoader.getInstance().getGameDir().resolve("echo-server");
-            Files.createDirectories(root);
+        int chosenPort = pickFreePort();
+        writeEula(root);
+        writeServerProperties(root, chosenPort);
+        writeWhitelistAndOps(root, ownerId, ownerName);
+        copyServerMods(root);
 
-            Path launchJar = root.resolve("fabric-server-launch.jar");
-            if (Files.notExists(launchJar) || Files.size(launchJar) == 0) {
-                EchoMod.LOGGER.info("Downloading echo.net's server launcher (first time only)...");
-                downloadServerLauncher(launchJar);
-            }
+        ProcessBuilder pb = new ProcessBuilder(javaBinary(), "-Xmx2G", "-jar", "fabric-server-launch.jar", "nogui")
+                .directory(root.toFile())
+                .redirectErrorStream(true)
+                .redirectOutput(root.resolve("echo-host.log").toFile());
+        process = pb.start();
+        port = chosenPort;
 
-            int chosenPort = pickFreePort();
-            writeEula(root);
-            writeServerProperties(root, chosenPort);
-            writeWhitelistAndOps(root, ownerId, ownerName);
-            writePrivateWorldConfig(root);
-            copyServerMods(root);
-
-            ProcessBuilder pb = new ProcessBuilder(javaBinary(), "-Xmx2G", "-jar", "fabric-server-launch.jar", "nogui")
-                    .directory(root.toFile())
-                    .redirectErrorStream(true)
-                    .redirectOutput(root.resolve("echo-host.log").toFile());
-            process = pb.start();
-            port = chosenPort;
-
-            if (!waitForPort("127.0.0.1", chosenPort, Duration.ofSeconds(120))) {
-                return "echo.net didn't come up in time — check echo-server/echo-host.log and "
-                        + "echo-server/logs/latest.log for what went wrong.";
-            }
-
-            return "echo.net is up at 127.0.0.1:" + chosenPort + ". Add that address in your multiplayer menu — "
-                    + "only whitelisted accounts (just you, right now) with the ECHO mod installed can get in.";
-        } catch (Exception e) {
-            EchoMod.LOGGER.warn("Could not host echo.net: {}", e.toString());
-            return "Couldn't start echo.net: " + e.getMessage();
+        if (!waitForPort("127.0.0.1", chosenPort, Duration.ofSeconds(120))) {
+            return "echo.net didn't come up in time — check echo-server/echo-host.log and "
+                    + "echo-server/logs/latest.log for what went wrong.";
         }
+
+        return "echo.net is up at 127.0.0.1:" + chosenPort + " and stays running even after you log off. "
+                + "Add that address in your multiplayer menu — only whitelisted accounts with the ECHO mod "
+                + "installed can get in.";
     }
 
     /**
@@ -191,10 +216,6 @@ public final class EchoServerHost {
             throw new IOException("download failed with HTTP " + res.statusCode() + " from " + url);
         }
     }
-
-    // ------------------------------------------------------------------ //
-    //  Capability / environment                                           //
-    // ------------------------------------------------------------------ //
 
     private static boolean canSpawnProcess() {
         try {
@@ -253,22 +274,18 @@ public final class EchoServerHost {
         return false;
     }
 
-    // ------------------------------------------------------------------ //
-    //  Bootstrap files                                                     //
-    // ------------------------------------------------------------------ //
-
     private static void writeEula(Path root) throws IOException {
         Files.writeString(root.resolve("eula.txt"), "eula=true\n", StandardCharsets.UTF_8);
     }
 
     private static void writeServerProperties(Path root, int port) throws IOException {
         String props = String.join("\n",
-                "motd=" + escapeProps(MOTD),
+                "motd=" + escapeProps(EchoPrivateWorld.MOTD),
                 "white-list=true",
                 "enforce-whitelist=true",
                 "online-mode=true",
                 "max-players=8",
-                "level-name=echo_net_world",
+                "level-name=" + EchoPrivateWorld.LEVEL_NAME,
                 "server-port=" + port,
                 "spawn-protection=0",
                 "allow-flight=true",
@@ -283,13 +300,6 @@ public final class EchoServerHost {
         Files.writeString(root.resolve("ops.json"),
                 "[{\"uuid\":\"" + uuid + "\",\"name\":\"" + safeName
                         + "\",\"level\":4,\"bypassesPlayerLimit\":false}]", StandardCharsets.UTF_8);
-    }
-
-    /** Pre-seeds echo.net's own config so it always identifies as ECHO's private world. */
-    private static void writePrivateWorldConfig(Path root) throws IOException {
-        Path configDir = root.resolve("config");
-        Files.createDirectories(configDir);
-        Files.writeString(configDir.resolve("echo.json"), "{\n  \"privateWorld\": true\n}\n", StandardCharsets.UTF_8);
     }
 
     /** Copies every non-client-only mod jar so echo.net runs with the same mods as the client. */
@@ -324,5 +334,64 @@ public final class EchoServerHost {
 
     private static String escapeProps(String s) {
         return s.replace("\\", "\\\\").replace(":", "\\:").replace("=", "\\=");
+    }
+
+    // ------------------------------------------------------------------ //
+    //  Fallback: LAN, tied to the current session                         //
+    // ------------------------------------------------------------------ //
+
+    private static CompletableFuture<String> fallBackToLan(String notice) {
+        CompletableFuture<String> result = new CompletableFuture<>();
+        Minecraft mc = Minecraft.getInstance();
+        mc.execute(() -> {
+            try {
+                result.complete(notice + " Opening echo.net as a LAN world instead — it will only stay up "
+                        + "while you're in it.\n" + hostLanOnClientThread(mc));
+            } catch (Exception e) {
+                EchoMod.LOGGER.warn("LAN fallback for echo.net also failed: {}", e.toString());
+                result.complete(notice + " The LAN fallback also failed: " + e.getMessage());
+            }
+        });
+        return result;
+    }
+
+    private static String hostLanOnClientThread(Minecraft mc) throws Exception {
+        IntegratedServer current = mc.getSingleplayerServer();
+        if (mc.hasSingleplayerServer() && current != null && EchoPrivateWorld.is(current)) {
+            return publishToLan(mc, current);
+        }
+
+        Path saveDir = FabricLoader.getInstance().getGameDir()
+                .resolve("saves").resolve(EchoPrivateWorld.LEVEL_NAME);
+        boolean exists = Files.exists(saveDir.resolve("level.dat"));
+
+        if (exists) {
+            mc.createWorldOpenFlows().loadLevel(mc.screen, EchoPrivateWorld.LEVEL_NAME);
+            return "Opening echo.net...";
+        }
+
+        mc.setScreen(CreateWorldScreen.openFresh(mc, mc.screen));
+        return "Preciso de um clique seu, só essa primeira vez: no menu que abriu, coloque o nome do mundo "
+                + "exatamente como \"" + EchoPrivateWorld.LEVEL_NAME + "\" e clique em Criar Novo Mundo — assim "
+                + "que ele carregar eu já abro pro LAN e travo pra só quem tem o mod, sozinho.";
+    }
+
+    /** Called automatically once echo.net (LAN mode) finishes loading — see EchoModClient's join hook. */
+    public static String publishToLan(Minecraft mc, IntegratedServer server) {
+        if (server.isPublished()) {
+            return "echo.net is already open to LAN.";
+        }
+        boolean ok = server.publishServer(GameType.SURVIVAL, false, findFreeLanPort());
+        if (!ok) {
+            return "Couldn't open echo.net to LAN — check the log for what blocked it.";
+        }
+        return "echo.net is open to LAN — it should show up automatically in your multiplayer server list. "
+                + "Only accounts with the ECHO mod installed can actually get in. This stops the moment you "
+                + "leave the world.";
+    }
+
+    private static int findFreeLanPort() {
+        int candidate = pickFreePort();
+        return candidate == 25565 ? 0 : candidate; // 0 lets vanilla pick if every candidate above was taken
     }
 }

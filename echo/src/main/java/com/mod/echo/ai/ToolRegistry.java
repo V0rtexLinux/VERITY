@@ -607,7 +607,7 @@ public final class ToolRegistry {
                 .requiredStr("description", "What to build, e.g. \"cozy medieval cottage\"")
                 .build(),
             (ctx, a) -> {
-                if (!EchoConfig.get().privateWorld) {
+                if (!com.mod.echo.hosting.EchoPrivateWorld.is(ctx.server())) {
                     return "I can only build big schematics here on echo.net, not in this world.";
                 }
                 String query = ToolSpec.str(a, "description", "");
@@ -616,7 +616,7 @@ public final class ToolRegistry {
                     var result = com.mod.echo.schematic.SchematicFetcher.fetch(query);
                     var origin = ctx.player().blockPosition();
                     return onServerThread(ctx, () -> com.mod.echo.schematic.SchematicBuilder.place(
-                            ctx.player(), result.schematic(), origin) + " (source: " + result.source() + ")");
+                            ctx.player(), ctx.server(), result.schematic(), origin) + " (source: " + result.source() + ")");
                 } catch (java.io.IOException e) {
                     return e.getMessage();
                 }

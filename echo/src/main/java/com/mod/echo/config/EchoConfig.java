@@ -81,19 +81,6 @@ public final class EchoConfig {
     public String bioSignalUrl = "http://127.0.0.1:9727";
 
     // ------------------------------------------------------------------ //
-    //  Private world ("echo.net")                                         //
-    // ------------------------------------------------------------------ //
-
-    /**
-     * True only inside the dedicated server ECHO creates for itself and its
-     * player (see {@code com.mod.echo.hosting.EchoServerHost}). Never set this
-     * by hand in a real world's config — it is what gates the mod-only join
-     * check and the schematic builder to that one private world, and is baked
-     * into echo.net's own config file when it is created.
-     */
-    public boolean privateWorld = false;
-
-    // ------------------------------------------------------------------ //
     //  Settings auto-tuner                                                 //
     // ------------------------------------------------------------------ //
 

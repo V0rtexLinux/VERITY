@@ -1,7 +1,8 @@
 package com.mod.echo.schematic;
 
-import com.mod.echo.config.EchoConfig;
+import com.mod.echo.hosting.EchoPrivateWorld;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.state.BlockState;
@@ -12,8 +13,8 @@ import java.util.Set;
 /**
  * Places a parsed {@link Schematic} into the world, one block per position.
  *
- * <p>Restricted to ECHO's own private world ({@link EchoConfig#privateWorld}) —
- * the point of that whole system is a place ECHO can shape freely without ever
+ * <p>Restricted to ECHO's own private world ({@link EchoPrivateWorld}) — the
+ * point of that whole system is a place ECHO can shape freely without ever
  * touching the player's real base or a shared server. This check runs here too,
  * not only where the tool is registered, so nothing can call this class directly
  * and skip it.
@@ -25,8 +26,8 @@ public final class SchematicBuilder {
     /** Hard ceiling so a huge download cannot freeze the server for minutes. */
     private static final long MAX_BLOCKS = 60_000;
 
-    public static String place(ServerPlayer player, Schematic schem, BlockPos origin) {
-        if (!EchoConfig.get().privateWorld) {
+    public static String place(ServerPlayer player, MinecraftServer server, Schematic schem, BlockPos origin) {
+        if (!EchoPrivateWorld.is(server)) {
             return "I can only build big schematics here on echo.net, not in your main world — "
                     + "say \"echo host\" to open echo.net first.";
         }
