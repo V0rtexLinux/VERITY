@@ -67,6 +67,9 @@ public final class EchoConfig {
     public boolean voiceEnabled = true;
     /** Spawn the floating companion orb next to the player. */
     public boolean companionEnabled = true;
+    /** Let ECHO look things up on the internet (DuckDuckGo/Wikipedia, no key needed) for
+     *  questions outside Minecraft or outside what it already knows. */
+    public boolean webSearchEnabled = true;
 
     // ------------------------------------------------------------------ //
     //  Settings auto-tuner                                                 //
@@ -163,6 +166,7 @@ public final class EchoConfig {
                 case "hud", "show_hud"            -> showHud = parseBool(value);
                 case "voice", "voice_enabled"     -> voiceEnabled = parseBool(value);
                 case "companion"                  -> companionEnabled = parseBool(value);
+                case "web_search"                 -> webSearchEnabled = parseBool(value);
                 case "world_tools"                -> allowWorldTools = parseBool(value);
                 case "raw_commands"               -> allowRawCommands = parseBool(value);
                 case "tuner"                      -> settingsTunerEnabled = parseBool(value);

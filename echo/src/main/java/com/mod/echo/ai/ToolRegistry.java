@@ -87,6 +87,7 @@ public final class ToolRegistry {
         for (ToolSpec<Context> tool : TOOLS.values()) {
             if (!cfg.allowWorldTools && WORLD_TOOLS.contains(tool.name)) continue;
             if (!cfg.allowRawCommands && tool.name.equals("run_command")) continue;
+            if (!cfg.webSearchEnabled && tool.name.equals("web_search")) continue;
             out.add(tool.toSchema());
         }
         return out;
@@ -103,6 +104,9 @@ public final class ToolRegistry {
         }
         if (!cfg.allowRawCommands && name.equals("run_command")) {
             return "Raw command execution is disabled in echo.json (allowRawCommands=false).";
+        }
+        if (!cfg.webSearchEnabled && name.equals("web_search")) {
+            return "Internet lookups are disabled in echo.json (webSearchEnabled=false).";
         }
         EchoMod.LOGGER.debug("Tool {} {}", name, args);
         return tool.invoke(context, args);
@@ -925,6 +929,13 @@ public final class ToolRegistry {
                 + "for your own continuity. Use it sparingly, only when something is actually worth keeping.",
             ToolSpec.Schema.of().requiredStr("thought", "The note, in your own words").build(),
             (ctx, a) -> EchoSelf.reflect(ToolSpec.str(a, "thought", "")));
+
+        add("web_search",
+            "Look something up on the internet — for anything outside Minecraft, or outside what you "
+                + "already know confidently: current facts, definitions, real-world people, places, events. "
+                + "Use this instead of guessing whenever the player asks something you are not sure about.",
+            ToolSpec.Schema.of().requiredStr("query", "What to search for").build(),
+            (ctx, a) -> WebSearch.search(ToolSpec.str(a, "query", "")));
 
         add("set_config",
             "Change one of ECHO's own settings and save it to echo.json.",
