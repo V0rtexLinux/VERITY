@@ -3,6 +3,7 @@ package com.mod.echo.ai;
 import com.google.gson.JsonObject;
 import com.mod.echo.EchoMod;
 import com.mod.echo.assistant.KnowledgeBase;
+import com.mod.echo.bio.BioSignal;
 import com.mod.echo.config.EchoConfig;
 import com.mod.echo.memory.EchoMemory;
 import com.mod.echo.memory.EchoSelf;
@@ -59,10 +60,11 @@ public final class ClientToolRegistry {
     }
 
     public static List<JsonObject> schemas() {
-        boolean webSearch = EchoConfig.get().webSearchEnabled;
+        EchoConfig cfg = EchoConfig.get();
         List<JsonObject> out = new ArrayList<>();
         for (ToolSpec<Minecraft> tool : TOOLS.values()) {
-            if (!webSearch && tool.name.equals("web_search")) continue;
+            if (!cfg.webSearchEnabled && tool.name.equals("web_search")) continue;
+            if (!cfg.bioSignalEnabled && tool.name.equals("biosignal_status")) continue;
             out.add(tool.toSchema());
         }
         return out;
@@ -73,8 +75,12 @@ public final class ClientToolRegistry {
         if (tool == null) {
             return "There is no tool called '" + name + "'. Available: " + String.join(", ", TOOLS.keySet());
         }
-        if (!EchoConfig.get().webSearchEnabled && name.equals("web_search")) {
+        EchoConfig cfg = EchoConfig.get();
+        if (!cfg.webSearchEnabled && name.equals("web_search")) {
             return "Internet lookups are disabled in echo.json (webSearchEnabled=false).";
+        }
+        if (!cfg.bioSignalEnabled && name.equals("biosignal_status")) {
+            return "The biosignal bridge is disabled in echo.json (bioSignalEnabled=false).";
         }
         EchoMod.LOGGER.debug("Client tool {} {}", name, args);
         return tool.invoke(Minecraft.getInstance(), args);
@@ -599,6 +605,12 @@ public final class ClientToolRegistry {
                 + "Use this instead of guessing whenever the player asks something you are not sure about.",
             ToolSpec.Schema.of().requiredStr("query", "What to search for").build(),
             (mc, a) -> WebSearch.search(ToolSpec.str(a, "query", "")));
+
+        add("biosignal_status",
+            "Check the player's live focus/calm reading from their connected EEG biosignal device, "
+                + "if one is set up. Returns 'No biosignal device connected' if there is none.",
+            ToolSpec.Schema.none().build(),
+            (mc, a) -> BioSignal.describe());
 
         add("set_config", "Change one of ECHO's own settings and save it.",
             ToolSpec.Schema.of()
