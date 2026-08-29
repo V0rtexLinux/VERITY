@@ -7,6 +7,7 @@ import com.mod.echo.hosting.EchoServerHost;
 import com.mod.echo.net.SettingsRequestPayload;
 import com.mod.echo.settings.SettingsTuner;
 import com.mod.echo.config.EchoConfig;
+import com.mod.echo.splash.BootSplash;
 import com.mod.echo.voice.VoiceHudRenderer;
 import com.mod.echo.voice.VoiceListener;
 import net.fabricmc.api.ClientModInitializer;
@@ -42,6 +43,7 @@ public class EchoModClient implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             voiceListener.start();
             maybeAutoTune();
+            BootSplash.maybeShow();
         });
 
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
