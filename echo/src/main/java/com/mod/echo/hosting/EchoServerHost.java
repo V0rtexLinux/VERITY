@@ -8,8 +8,8 @@ import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
-import net.minecraft.server.integrated.IntegratedServer;
 import net.minecraft.world.level.GameType;
 
 import java.io.IOException;
@@ -120,7 +120,7 @@ public final class EchoServerHost {
         }
 
         Minecraft mc = Minecraft.getInstance();
-        IntegratedServer server = mc.getSingleplayerServer();
+        var server = mc.getSingleplayerServer();
         if (server != null && EchoPrivateWorld.is(server) && server.isPublished()) {
             return "echo.net is running in LAN mode, which has no way to close it separately — "
                     + "leave the world (Save and Quit to Title) to stop it.";
@@ -356,9 +356,9 @@ public final class EchoServerHost {
     }
 
     private static String hostLanOnClientThread(Minecraft mc) throws Exception {
-        IntegratedServer current = mc.getSingleplayerServer();
+        var current = mc.getSingleplayerServer();
         if (mc.hasSingleplayerServer() && current != null && EchoPrivateWorld.is(current)) {
-            return publishToLan(mc, current);
+            return publishToLan(mc);
         }
 
         Path saveDir = FabricLoader.getInstance().getGameDir()
@@ -366,18 +366,27 @@ public final class EchoServerHost {
         boolean exists = Files.exists(saveDir.resolve("level.dat"));
 
         if (exists) {
-            mc.createWorldOpenFlows().loadLevel(mc.screen, EchoPrivateWorld.LEVEL_NAME);
-            return "Opening echo.net...";
+            // Reopening a save by name from mod code needs an internal API this couldn't verify without the
+            // real client source; the normal world-select menu already does this correctly, so it gets the one
+            // click instead of a second guess. Once loaded, EchoModClient's join hook still publishes to LAN
+            // with zero further input.
+            return "O mundo \"" + EchoPrivateWorld.LEVEL_NAME + "\" já existe — abra ele pelo menu Jogar Sozinho "
+                    + "e eu abro pro LAN sozinho assim que ele carregar.";
         }
 
-        mc.setScreen(CreateWorldScreen.openFresh(mc, mc.screen));
+        Screen previous = mc.screen;
+        CreateWorldScreen.openFresh(mc, () -> mc.setScreen(previous));
         return "Preciso de um clique seu, só essa primeira vez: no menu que abriu, coloque o nome do mundo "
                 + "exatamente como \"" + EchoPrivateWorld.LEVEL_NAME + "\" e clique em Criar Novo Mundo — assim "
                 + "que ele carregar eu já abro pro LAN e travo pra só quem tem o mod, sozinho.";
     }
 
     /** Called automatically once echo.net (LAN mode) finishes loading — see EchoModClient's join hook. */
-    public static String publishToLan(Minecraft mc, IntegratedServer server) {
+    public static String publishToLan(Minecraft mc) {
+        var server = mc.getSingleplayerServer();
+        if (server == null) {
+            return "echo.net isn't the active world.";
+        }
         if (server.isPublished()) {
             return "echo.net is already open to LAN.";
         }

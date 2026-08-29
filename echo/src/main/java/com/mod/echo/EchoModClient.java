@@ -57,7 +57,7 @@ public class EchoModClient implements ClientModInitializer {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
             var server = client.getSingleplayerServer();
             if (server == null || !EchoPrivateWorld.is(server) || server.isPublished()) return;
-            String result = EchoServerHost.publishToLan(client, server);
+            String result = EchoServerHost.publishToLan(client);
             if (client.player != null) {
                 client.player.sendSystemMessage(Component.literal(EchoStyle.block(EchoStyle.TEXT + result)));
             }
