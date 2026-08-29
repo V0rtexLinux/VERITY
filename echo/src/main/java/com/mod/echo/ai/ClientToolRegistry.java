@@ -612,6 +612,19 @@ public final class ClientToolRegistry {
             ToolSpec.Schema.none().build(),
             (mc, a) -> BioSignal.describe());
 
+        add("host_private_server",
+            "Create ECHO's own private, whitelisted dedicated server (\"echo.net\") that only the player "
+                + "and accounts with the ECHO mod installed can join. Use when the player wants a private "
+                + "world just for the two of them. Can take a few minutes the first time (downloading the "
+                + "server); does nothing on environments that cannot spawn a separate process (e.g. Android).",
+            ToolSpec.Schema.none().build(),
+            (mc, a) -> com.mod.echo.hosting.EchoServerHost.host().join());
+
+        add("stop_private_server",
+            "Stop ECHO's private server (echo.net) if it is currently running.",
+            ToolSpec.Schema.none().build(),
+            (mc, a) -> com.mod.echo.hosting.EchoServerHost.stop());
+
         add("set_config", "Change one of ECHO's own settings and save it.",
             ToolSpec.Schema.of()
                 .requiredStr("key", "Setting name")

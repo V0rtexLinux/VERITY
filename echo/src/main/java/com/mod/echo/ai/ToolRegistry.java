@@ -121,7 +121,7 @@ public final class ToolRegistry {
             "give_item", "heal_player", "give_xp", "teleport", "teleport_to_waypoint",
             "set_spawn", "set_time", "set_weather", "set_difficulty", "set_gamerule",
             "summon_entity", "place_block", "apply_effect", "clear_effects",
-            "build_structure", "light_area", "dig_tunnel", "emergency_shelter",
+            "build_structure", "light_area", "dig_tunnel", "emergency_shelter", "build_schematic",
             "plant_crops", "harvest_crops", "run_command");
 
     // ------------------------------------------------------------------ //
@@ -597,6 +597,30 @@ public final class ToolRegistry {
                 .build(),
             (ctx, a) -> onServerThread(ctx,
                     () -> BuildAssistant.digTunnel(ctx.player(), ToolSpec.integer(a, "length", 16))));
+
+        add("build_schematic",
+            "Search the internet for a schematic matching a description and build it at the player's "
+                + "position — for real, detailed structures, not the simple shapes build_structure makes. "
+                + "Only works inside ECHO's own private world (echo.net); refuses everywhere else, since a "
+                + "downloaded structure is not something to place in someone's real world uninvited.",
+            ToolSpec.Schema.of()
+                .requiredStr("description", "What to build, e.g. \"cozy medieval cottage\"")
+                .build(),
+            (ctx, a) -> {
+                if (!EchoConfig.get().privateWorld) {
+                    return "I can only build big schematics here on echo.net, not in this world.";
+                }
+                String query = ToolSpec.str(a, "description", "");
+                if (query.isBlank()) return "What should I build?";
+                try {
+                    var result = com.mod.echo.schematic.SchematicFetcher.fetch(query);
+                    var origin = ctx.player().blockPosition();
+                    return onServerThread(ctx, () -> com.mod.echo.schematic.SchematicBuilder.place(
+                            ctx.player(), result.schematic(), origin) + " (source: " + result.source() + ")");
+                } catch (java.io.IOException e) {
+                    return e.getMessage();
+                }
+            });
     }
 
     // ------------------------------------------------------------------ //
