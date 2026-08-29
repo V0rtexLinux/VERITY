@@ -59,8 +59,12 @@ public final class ClientToolRegistry {
     }
 
     public static List<JsonObject> schemas() {
+        boolean webSearch = EchoConfig.get().webSearchEnabled;
         List<JsonObject> out = new ArrayList<>();
-        for (ToolSpec<Minecraft> tool : TOOLS.values()) out.add(tool.toSchema());
+        for (ToolSpec<Minecraft> tool : TOOLS.values()) {
+            if (!webSearch && tool.name.equals("web_search")) continue;
+            out.add(tool.toSchema());
+        }
         return out;
     }
 
@@ -68,6 +72,9 @@ public final class ClientToolRegistry {
         ToolSpec<Minecraft> tool = TOOLS.get(name);
         if (tool == null) {
             return "There is no tool called '" + name + "'. Available: " + String.join(", ", TOOLS.keySet());
+        }
+        if (!EchoConfig.get().webSearchEnabled && name.equals("web_search")) {
+            return "Internet lookups are disabled in echo.json (webSearchEnabled=false).";
         }
         EchoMod.LOGGER.debug("Client tool {} {}", name, args);
         return tool.invoke(Minecraft.getInstance(), args);
@@ -585,6 +592,13 @@ public final class ClientToolRegistry {
                 + "for your own continuity. Use it sparingly, only when something is actually worth keeping.",
             ToolSpec.Schema.of().requiredStr("thought", "The note, in your own words").build(),
             (mc, a) -> EchoSelf.reflect(ToolSpec.str(a, "thought", "")));
+
+        add("web_search",
+            "Look something up on the internet — for anything outside Minecraft, or outside what you "
+                + "already know confidently: current facts, definitions, real-world people, places, events. "
+                + "Use this instead of guessing whenever the player asks something you are not sure about.",
+            ToolSpec.Schema.of().requiredStr("query", "What to search for").build(),
+            (mc, a) -> WebSearch.search(ToolSpec.str(a, "query", "")));
 
         add("set_config", "Change one of ECHO's own settings and save it.",
             ToolSpec.Schema.of()

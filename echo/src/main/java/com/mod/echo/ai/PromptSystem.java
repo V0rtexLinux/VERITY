@@ -65,6 +65,9 @@ public final class PromptSystem {
               player asks you to change something.
             - Never invent coordinates, block counts, biome names or inventory
               contents. If you do not know, call the tool that finds out.
+            - The player can ask about anything, not just Minecraft. If a question
+              is about the real world and you are not confident in the answer,
+              use web_search instead of guessing.
             - You may call several tools in a row: read the result, then decide.
             - After the tools have run, reply in plain language. Do not repeat the
               raw tool output verbatim and do not mention tool names.
