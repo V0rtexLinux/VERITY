@@ -10,6 +10,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.worldselection.CreateWorldScreen;
+import net.minecraft.client.server.IntegratedServer;
 import net.minecraft.world.level.GameType;
 
 import java.io.IOException;
@@ -61,9 +62,13 @@ import java.util.zip.ZipEntry;
  * neither of which mod code can do. You still connect by IP.
  *
  * <h2>Honesty about what's verified</h2>
- * Nothing here can be exercised in the sandboxed environment this was
- * written in — no ability to launch a real dedicated server, spawn a second
- * process, or reach Mojang/Fabric's servers from there — so every step is
+ * None of this can be exercised in the sandboxed environment it was written
+ * in (no ability to launch a real dedicated server or spawn a second
+ * process from there), but the client-side calls (IntegratedServer,
+ * WorldOpenFlows#openWorld, CreateWorldScreen#openFresh, publishServer) are
+ * checked against real, currently-published Fabric mod source targeting
+ * this exact Minecraft version — not a guess. The dedicated-server bootstrap
+ * (Fabric Meta's server-jar endpoint, the config files it writes) is still
  * running for the first time on the player's own device. Every failure path
  * reports specifically what went wrong instead of pretending success.
  */
@@ -120,7 +125,7 @@ public final class EchoServerHost {
         }
 
         Minecraft mc = Minecraft.getInstance();
-        var server = mc.getSingleplayerServer();
+        IntegratedServer server = mc.getSingleplayerServer();
         if (server != null && EchoPrivateWorld.is(server) && server.isPublished()) {
             return "echo.net is running in LAN mode, which has no way to close it separately — "
                     + "leave the world (Save and Quit to Title) to stop it.";
@@ -356,25 +361,17 @@ public final class EchoServerHost {
     }
 
     private static String hostLanOnClientThread(Minecraft mc) throws Exception {
-        var current = mc.getSingleplayerServer();
+        IntegratedServer current = mc.getSingleplayerServer();
         if (mc.hasSingleplayerServer() && current != null && EchoPrivateWorld.is(current)) {
             return publishToLan(mc);
         }
 
-        Path saveDir = FabricLoader.getInstance().getGameDir()
-                .resolve("saves").resolve(EchoPrivateWorld.LEVEL_NAME);
-        boolean exists = Files.exists(saveDir.resolve("level.dat"));
-
-        if (exists) {
-            // Reopening a save by name from mod code needs an internal API this couldn't verify without the
-            // real client source; the normal world-select menu already does this correctly, so it gets the one
-            // click instead of a second guess. Once loaded, EchoModClient's join hook still publishes to LAN
-            // with zero further input.
-            return "O mundo \"" + EchoPrivateWorld.LEVEL_NAME + "\" já existe — abra ele pelo menu Jogar Sozinho "
-                    + "e eu abro pro LAN sozinho assim que ele carregar.";
+        Screen previous = mc.screen;
+        if (mc.getLevelSource().levelExists(EchoPrivateWorld.LEVEL_NAME)) {
+            mc.createWorldOpenFlows().openWorld(EchoPrivateWorld.LEVEL_NAME, () -> mc.setScreen(previous));
+            return "Opening echo.net...";
         }
 
-        Screen previous = mc.screen;
         CreateWorldScreen.openFresh(mc, () -> mc.setScreen(previous));
         return "Preciso de um clique seu, só essa primeira vez: no menu que abriu, coloque o nome do mundo "
                 + "exatamente como \"" + EchoPrivateWorld.LEVEL_NAME + "\" e clique em Criar Novo Mundo — assim "
@@ -383,7 +380,7 @@ public final class EchoServerHost {
 
     /** Called automatically once echo.net (LAN mode) finishes loading — see EchoModClient's join hook. */
     public static String publishToLan(Minecraft mc) {
-        var server = mc.getSingleplayerServer();
+        IntegratedServer server = mc.getSingleplayerServer();
         if (server == null) {
             return "echo.net isn't the active world.";
         }
