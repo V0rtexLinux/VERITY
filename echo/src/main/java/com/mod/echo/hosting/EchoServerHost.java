@@ -122,7 +122,8 @@ public final class EchoServerHost {
             if (process.isAlive()) process.destroyForcibly();
             process = null;
             port = -1;
-            return "Stopped echo.net.";
+            String playitResult = PlayitBridge.isRunning() ? " " + PlayitBridge.stop() : "";
+            return "Stopped echo.net." + playitResult;
         }
 
         Minecraft mc = Minecraft.getInstance();
@@ -197,7 +198,9 @@ public final class EchoServerHost {
                 result.append(" Heads up: your internet connection looks like it's behind carrier-grade NAT "
                         + "(your router doesn't have a real public IP) — no port forwarding, automatic or "
                         + "manual, can make this reachable from outside your network. That's an ISP-level "
-                        + "limit, not something forwarding a port ever fixes.");
+                        + "limit, not something forwarding a port ever fixes. Trying playit.gg instead, since "
+                        + "it tunnels out instead of needing an open port: ")
+                        .append(PlayitBridge.start(chosenPort));
             }
         } else {
             result.append(" UPnP auto port-forwarding is off (echo set upnp true to enable) — forward port ")
