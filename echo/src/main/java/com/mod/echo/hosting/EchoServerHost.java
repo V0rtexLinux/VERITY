@@ -4,6 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.mod.echo.EchoMod;
+import com.mod.echo.config.EchoConfig;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -185,12 +186,35 @@ public final class EchoServerHost {
                     + "echo-server/logs/latest.log for what went wrong.";
         }
 
-        return "echo.net is up on port " + chosenPort + " and stays running even after you log off. "
-                + "On this PC, join at 127.0.0.1:" + chosenPort + ". To join from outside your network with a "
-                + "real address — like a domain instead of an IP — forward port " + chosenPort + " (TCP) to this "
-                + "PC on your router, then point that domain's DNS at your public IP; neither of those is "
-                + "something I can do from inside the game. Only whitelisted accounts with the ECHO mod "
-                + "installed can get in either way.";
+        StringBuilder result = new StringBuilder("echo.net is up on port ").append(chosenPort)
+                .append(" and stays running even after you log off. On this PC, join at 127.0.0.1:")
+                .append(chosenPort).append('.');
+
+        if (EchoConfig.get().upnpEnabled) {
+            result.append(' ').append(UpnpPortMapper.mapPort(chosenPort));
+            String cgnat = UpnpPortMapper.detectCgnat();
+            if (cgnat.equals("cgnat")) {
+                result.append(" Heads up: your internet connection looks like it's behind carrier-grade NAT "
+                        + "(your router doesn't have a real public IP) — no port forwarding, automatic or "
+                        + "manual, can make this reachable from outside your network. That's an ISP-level "
+                        + "limit, not something forwarding a port ever fixes.");
+            }
+        } else {
+            result.append(" UPnP auto port-forwarding is off (echo set upnp true to enable) — forward port ")
+                    .append(chosenPort).append(" (TCP) manually if you want to be reachable from outside.");
+        }
+
+        if (DuckDns.isConfigured()) {
+            result.append(' ').append(DuckDns.update())
+                    .append(" Join from outside at ").append(DuckDns.domain()).append(':').append(chosenPort).append('.');
+        } else {
+            result.append(" No DuckDNS set up, so outside your network you're reachable only by raw IP — "
+                    + "\"echo set duckdns <name>\" and \"echo set duckdns_token <token>\" after making a free "
+                    + "account at duckdns.org give you a real address instead.");
+        }
+
+        result.append(" Only whitelisted accounts with the ECHO mod installed can get in either way.");
+        return result.toString();
     }
 
     /**

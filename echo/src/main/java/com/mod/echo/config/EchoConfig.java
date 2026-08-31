@@ -81,6 +81,17 @@ public final class EchoConfig {
     public String bioSignalUrl = "http://127.0.0.1:9727";
 
     // ------------------------------------------------------------------ //
+    //  echo.net external reachability (all optional, off unless set)       //
+    // ------------------------------------------------------------------ //
+
+    /** DuckDNS subdomain (just the name, e.g. "echomc" for echomc.duckdns.org). Empty = disabled. */
+    public String duckDnsSubdomain = "";
+    /** Token from the DuckDNS account that owns duckDnsSubdomain. Empty = disabled. */
+    public String duckDnsToken = "";
+    /** Try UPnP to open echo.net's port on the router automatically. */
+    public boolean upnpEnabled = true;
+
+    // ------------------------------------------------------------------ //
     //  Settings auto-tuner                                                 //
     // ------------------------------------------------------------------ //
 
@@ -143,6 +154,8 @@ public final class EchoConfig {
         if (personality == null || personality.isBlank()) personality = "friendly";
         if (aiBaseUrl == null) aiBaseUrl = "";
         if (aiModel == null)   aiModel = "";
+        if (duckDnsSubdomain == null) duckDnsSubdomain = "";
+        if (duckDnsToken == null)     duckDnsToken = "";
         // Raw command execution is meaningless without the world tools it builds on.
         if (!allowWorldTools) allowRawCommands = false;
     }
@@ -178,6 +191,9 @@ public final class EchoConfig {
                 case "web_search"                 -> webSearchEnabled = parseBool(value);
                 case "biosignal", "bio_signal"     -> bioSignalEnabled = parseBool(value);
                 case "biosignal_url", "bio_signal_url" -> bioSignalUrl = value;
+                case "duckdns", "duckdns_subdomain" -> duckDnsSubdomain = value;
+                case "duckdns_token"               -> duckDnsToken = value;
+                case "upnp"                        -> upnpEnabled = parseBool(value);
                 case "world_tools"                -> allowWorldTools = parseBool(value);
                 case "raw_commands"               -> allowRawCommands = parseBool(value);
                 case "tuner"                      -> settingsTunerEnabled = parseBool(value);
