@@ -185,9 +185,12 @@ public final class EchoServerHost {
                     + "echo-server/logs/latest.log for what went wrong.";
         }
 
-        return "echo.net is up at 127.0.0.1:" + chosenPort + " and stays running even after you log off. "
-                + "Add that address in your multiplayer menu — only whitelisted accounts with the ECHO mod "
-                + "installed can get in.";
+        return "echo.net is up on port " + chosenPort + " and stays running even after you log off. "
+                + "On this PC, join at 127.0.0.1:" + chosenPort + ". To join from outside your network with a "
+                + "real address — like a domain instead of an IP — forward port " + chosenPort + " (TCP) to this "
+                + "PC on your router, then point that domain's DNS at your public IP; neither of those is "
+                + "something I can do from inside the game. Only whitelisted accounts with the ECHO mod "
+                + "installed can get in either way.";
     }
 
     /**
@@ -247,17 +250,28 @@ public final class EchoServerHost {
         return System.getProperty("os.name", "").toLowerCase(Locale.ROOT).contains("win");
     }
 
+    /**
+     * Prefers Minecraft's real default port. That matters beyond convention here:
+     * anyone port-forwarding this on a router, or pointing a real domain at it with a
+     * plain A record (no SRV record), needs a fixed, known port — 25565 is the one every
+     * "how to host a Minecraft server" guide and every client assumes when none is given.
+     */
     private static int pickFreePort() {
+        if (isPortFree(25565)) return 25565;
         for (int candidate = 25566; candidate < 25600; candidate++) {
-            try (ServerSocket s = new ServerSocket()) {
-                s.setReuseAddress(true);
-                s.bind(new InetSocketAddress("127.0.0.1", candidate));
-                return candidate;
-            } catch (IOException ignored) {
-                // taken — try the next one
-            }
+            if (isPortFree(candidate)) return candidate;
         }
         return 25565;
+    }
+
+    private static boolean isPortFree(int candidate) {
+        try (ServerSocket s = new ServerSocket()) {
+            s.setReuseAddress(true);
+            s.bind(new InetSocketAddress("0.0.0.0", candidate));
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
     }
 
     private static boolean waitForPort(String host, int port, Duration timeout) {
