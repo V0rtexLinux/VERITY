@@ -170,10 +170,15 @@ public final class LocalAI {
         List<String> installed = listModelsSync();
         long ramGb = systemRamGb();
 
-        if (!cfg.aiModel.isBlank()) {
+        if (!cfg.aiModel.isBlank() && (installed.isEmpty() || installed.contains(cfg.aiModel))) {
             model = cfg.aiModel;
             EchoMod.LOGGER.info("Model pinned by config: {}", model);
         } else {
+            if (!cfg.aiModel.isBlank()) {
+                EchoMod.LOGGER.warn("Configured model '{}' is not installed anymore — picking another one.",
+                        cfg.aiModel);
+                cfg.aiModel = "";
+            }
             model = ModelCatalog.pickInstalled(installed, ramGb);
         }
 
@@ -562,12 +567,31 @@ public final class LocalAI {
     public static String  getBaseUrl()       { return backend == null ? "-" : backend.baseUrl(); }
     public static String  getLastError()     { return lastError; }
 
-    /** Switch model at runtime; the change is remembered in the config file. */
+    /**
+     * Switch model at runtime; the change is remembered in the config file.
+     *
+     * <p>Validated against the backend's own installed list first — blindly
+     * accepting an unpulled or misspelled model id used to leave ECHO stuck
+     * failing every single message afterwards with a backend-side "could not
+     * load model" error, since nothing ever pointed back at the bad model id
+     * itself. The previously working model is left in place until the new one
+     * is confirmed to actually exist.
+     */
     public static String setModel(String modelId) {
         if (modelId == null || modelId.isBlank()) return "Give me a model name.";
-        model = modelId.trim();
+        String id = modelId.trim();
+
+        List<String> installed = listModelsSync();
+        if (!installed.isEmpty() && !installed.contains(id)) {
+            return "'" + id + "' isn't installed, so switching to it would just break every message afterwards. "
+                    + "Run \"ollama pull " + id + "\" first, or check \"echo models\" for what's already here.";
+        }
+
+        model = id;
         EchoConfig.get().aiModel = model;
         EchoConfig.save();
+        ready = true;
+        lastError = "";
         return "Now using " + model + " (" + ModelCatalog.describe(model) + ").";
     }
 

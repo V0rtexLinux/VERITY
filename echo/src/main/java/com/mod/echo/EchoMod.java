@@ -12,10 +12,12 @@ import com.mod.echo.net.VoiceQueryPayload;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
@@ -108,8 +110,20 @@ public class EchoMod implements ModInitializer {
     }
 
     private static void registerPlayerEvents() {
-        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) ->
-                server.execute(() -> ChatHandler.welcome(handler.player)));
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            // This only ever kicks in on echo.net: everyone joining it is on the same
+            // LAN already, so this is the check that they are actually running the
+            // ECHO client, not a modless one that would just get a broken, mod-dependent
+            // world with no way to talk to ECHO.
+            if (com.mod.echo.hosting.EchoPrivateWorld.is(server)
+                    && !ServerPlayNetworking.canSend(handler.player, SettingsRequestPayload.TYPE)) {
+                handler.disconnect(Component.literal(
+                        "This is echo.net, a private world for ECHO and its player — "
+                                + "you need the ECHO mod installed to enter."));
+                return;
+            }
+            server.execute(() -> ChatHandler.welcome(handler.player));
+        });
 
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) ->
                 EchoBrain.clear(handler.player.getUUID().toString()));

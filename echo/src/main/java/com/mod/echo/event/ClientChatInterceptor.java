@@ -9,6 +9,7 @@ import com.mod.echo.ai.LocalAI;
 import com.mod.echo.ai.PersonalityEngine;
 import com.mod.echo.bio.BioSignal;
 import com.mod.echo.config.EchoConfig;
+import com.mod.echo.hosting.EchoServerHost;
 import com.mod.echo.memory.EchoMemory;
 import com.mod.echo.net.VoiceQueryPayload;
 import com.mod.echo.settings.HardwareProbe;
@@ -113,6 +114,8 @@ public final class ClientChatInterceptor {
                      echo tools       everything I can do here
                      echo models      models installed locally
                      echo model <id>  switch to that model right now, no AI needed
+                     echo host        create echo.net, our own private server
+                     echo host stop   stop echo.net
                      echo config      show my configuration
                      echo set <k> <v> change one setting
                      echo reset       forget this conversation""";
@@ -161,6 +164,16 @@ public final class ClientChatInterceptor {
         if (q.startsWith("set ")) {
             String[] parts = q.substring(4).split("[= ]", 2);
             if (parts.length == 2) return EchoConfig.get().applyEdit(parts[0], parts[1].strip());
+        }
+        if (q.equals("host") || q.equals("hospedar")) {
+            EchoServerHost.host().thenAccept(result -> mc.execute(() ->
+                    show(mc, EchoStyle.block(EchoStyle.TEXT + result))));
+            return EchoServerHost.eulaNotice()
+                    + "\nHospedando echo.net — pode levar alguns minutos na primeira vez (baixando o servidor). "
+                    + "Aviso aqui quando estiver pronto.";
+        }
+        if (q.equals("host stop") || q.equals("parar host")) {
+            return EchoServerHost.stop();
         }
         if (q.equals("where did i die") || q.equals("last death") || q.equals("onde morri")) {
             var death = EchoMemory.lastDeath(conversationKey(mc));

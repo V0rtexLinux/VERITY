@@ -2,16 +2,21 @@ package com.mod.echo;
 
 import com.mod.echo.entity.EchoOrbRenderer;
 import com.mod.echo.event.ClientChatInterceptor;
+import com.mod.echo.hosting.EchoPrivateWorld;
+import com.mod.echo.hosting.EchoServerHost;
 import com.mod.echo.net.SettingsRequestPayload;
 import com.mod.echo.settings.SettingsTuner;
 import com.mod.echo.config.EchoConfig;
+import com.mod.echo.splash.BootSplash;
 import com.mod.echo.voice.VoiceHudRenderer;
 import com.mod.echo.voice.VoiceListener;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
+import net.minecraft.network.chat.Component;
 
 /**
  * Client-side setup.
@@ -38,11 +43,25 @@ public class EchoModClient implements ClientModInitializer {
         ClientLifecycleEvents.CLIENT_STARTED.register(client -> {
             voiceListener.start();
             maybeAutoTune();
+            BootSplash.maybeShow();
         });
 
         ClientLifecycleEvents.CLIENT_STOPPING.register(client -> {
             if (voiceListener != null) voiceListener.stop();
         });
+
+        // The one thing "echo host" cannot do synchronously: after it triggers loading
+        // (or freshly creating) echo.net, the actual IntegratedServer only exists once
+        // that load finishes — this is what publishes it to LAN the moment it does,
+        // with no extra command needed.
+        ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> client.execute(() -> {
+            var server = client.getSingleplayerServer();
+            if (server == null || !EchoPrivateWorld.is(server) || server.isPublished()) return;
+            String result = EchoServerHost.publishToLan(client);
+            if (client.player != null) {
+                client.player.sendSystemMessage(Component.literal(EchoStyle.block(EchoStyle.TEXT + result)));
+            }
+        }));
 
         EchoMod.LOGGER.info("ECHO client ready.");
     }
